@@ -1,4 +1,5 @@
 
+using Asp.Versioning;
 using CityInfo.API.DbContexts;
 using CityInfo.API.Interfaces;
 using CityInfo.API.Services;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Reflection;
 
 namespace CityInfo.API
 {
@@ -45,7 +47,13 @@ namespace CityInfo.API
             //    };
             //});
 
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(setupAction =>
+            {
+                var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+
+                setupAction.IncludeXmlComments(xmlCommentsFullPath);
+            });
             builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
 #if DEBUG
@@ -86,6 +94,13 @@ namespace CityInfo.API
                     policy.RequireClaim("city", "Antwerp");
                 });
             });
+
+            builder.Services.AddApiVersioning(setupAction =>
+            {
+                setupAction.ReportApiVersions = true;
+                setupAction.AssumeDefaultVersionWhenUnspecified = true;
+                setupAction.DefaultApiVersion = new ApiVersion(1, 0);
+            }).AddMvc();
 
             var app = builder.Build();
 
