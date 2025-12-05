@@ -1,5 +1,6 @@
 
 using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
 using CityInfo.API.DbContexts;
 using CityInfo.API.Interfaces;
 using CityInfo.API.Services;
@@ -47,13 +48,6 @@ namespace CityInfo.API
             //    };
             //});
 
-            builder.Services.AddSwaggerGen(setupAction =>
-            {
-                var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
-
-                setupAction.IncludeXmlComments(xmlCommentsFullPath);
-            });
             builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
 #if DEBUG
@@ -97,10 +91,31 @@ namespace CityInfo.API
 
             builder.Services.AddApiVersioning(setupAction =>
             {
-                setupAction.ReportApiVersions = true;
+                setupAction.DefaultApiVersion = new ApiVersion(1);
                 setupAction.AssumeDefaultVersionWhenUnspecified = true;
-                setupAction.DefaultApiVersion = new ApiVersion(1, 0);
-            }).AddMvc();
+                setupAction.ReportApiVersions = true;
+
+                // version comes from URL like /api/v1.0/cities
+                setupAction.ApiVersionReader = new UrlSegmentApiVersionReader();
+            })
+            .AddApiExplorer(setupAction =>
+            {
+                setupAction.GroupNameFormat = "'v'VVV";      // v1.0, v2.0
+                setupAction.SubstituteApiVersionInUrl = true;
+                setupAction.SubstitutionFormat = "VVV";      // 1.0, 2.0
+            });
+
+
+            // Tie ConfigureSwaggerOptions into DI
+            builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
+
+            builder.Services.AddSwaggerGen(setupAction =>
+            {
+                var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+
+                setupAction.IncludeXmlComments(xmlCommentsFullPath);
+            });
 
             var app = builder.Build();
 
@@ -113,9 +128,19 @@ namespace CityInfo.API
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
-            }
 
+                var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+
+                app.UseSwaggerUI(options =>
+                {
+                    foreach (var description in provider.ApiVersionDescriptions)
+                    {
+                        options.SwaggerEndpoint(
+                            $"/swagger/{description.GroupName}/swagger.json",
+                            $"CityInfo.API {description.GroupName.ToUpperInvariant()}");
+                    }
+                });
+            }
 
             app.UseHttpsRedirection();
 
@@ -125,10 +150,7 @@ namespace CityInfo.API
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.MapControllers();
 
             app.Run();
         }
