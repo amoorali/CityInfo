@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CityInfo.API.Controllers
+namespace CityInfo.APIs.Controllers
 {
     [ApiController]
     //[Authorize]

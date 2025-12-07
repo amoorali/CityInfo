@@ -1,5 +1,5 @@
-﻿using CityInfo.API.Entities;
-using CityInfo.Application.Common;
+﻿using CityInfo.Application.Common;
+using CityInfo.Domain.Entities;
 using CityInfo.Infrastructure.DbContexts;
 using CityInfo.Infrastructure.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CityInfo.API.Migrations
+namespace CityInfo.Infrastructure.Migrations
 {
     [DbContext(typeof(CityInfoContext))]
     [Migration("20251130114120_CityInfoDBInitialMigration")]

@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace CityInfo.API.Controllers
+namespace CityInfo.APIs.Controllers
 {
     [Route("api/authentication")]
     [ApiController]

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace CityInfo.API.Migrations
+namespace CityInfo.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class CityInfoDBInitialMigration : Migration

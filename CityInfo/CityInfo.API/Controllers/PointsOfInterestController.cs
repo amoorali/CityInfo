@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace CityInfo.API.Controllers
+namespace CityInfo.APIs.Controllers
 {
     [Route("api/v{version:apiVersion}/cities/{cityId}/pointsofinterest")]
     //[Authorize(Policy = "MustBeFromAntwerp")]
@@ -85,7 +85,7 @@ namespace CityInfo.API.Controllers
             if (!await _cityInfoRepository.CityExistsAsync(cityId))
                 return NotFound("City not found!");
 
-            var finalPointOfInterest = _mapper.Map<Entities.PointOfInterest>(pointOfInterest);
+            var finalPointOfInterest = _mapper.Map<Domain.Entities.PointOfInterest>(pointOfInterest);
 
             await _cityInfoRepository.AddPointOfInterestForCityAsync(
                 cityId, finalPointOfInterest);
@@ -98,7 +98,7 @@ namespace CityInfo.API.Controllers
             return CreatedAtRoute("GetPointOfInterest",
                 new
                 {
-                    cityId = cityId,
+                    cityId,
                     pointOfInterestId = createdPointOfInterestToReturn.Id
                 },
                 createdPointOfInterestToReturn);

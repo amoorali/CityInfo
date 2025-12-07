@@ -1,5 +1,5 @@
-﻿using CityInfo.API.Entities;
-using CityInfo.Application.Common;
+﻿using CityInfo.Application.Common;
+using CityInfo.Domain.Entities;
 
 namespace CityInfo.Infrastructure.Repositories.Contracts
 {

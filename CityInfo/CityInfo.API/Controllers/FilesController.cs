@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 
-namespace CityInfo.API.Controllers
+namespace CityInfo.APIs.Controllers
 {
     [Route("api/v{version:apiVersion}/files")]
     //[Authorize]
@@ -18,7 +18,7 @@ namespace CityInfo.API.Controllers
             FileExtensionContentTypeProvider fileExtensionContentTypeProvider)
         {
             _fileExtensionContentTypeProvider = fileExtensionContentTypeProvider
-                ?? throw new System.ArgumentNullException(
+                ?? throw new ArgumentNullException(
                     nameof(fileExtensionContentTypeProvider));
         }
 

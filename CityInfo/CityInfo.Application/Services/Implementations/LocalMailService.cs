@@ -1,4 +1,5 @@
 ﻿using CityInfo.Application.Services.Contracts;
+using Microsoft.Extensions.Configuration;
 
 namespace CityInfo.Application.Services.Implementations
 {

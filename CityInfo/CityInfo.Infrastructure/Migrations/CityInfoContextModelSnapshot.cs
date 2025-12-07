@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CityInfo.API.Migrations
+namespace CityInfo.Infrastructure.Migrations
 {
     [DbContext(typeof(CityInfoContext))]
     partial class CityInfoContextModelSnapshot : ModelSnapshot
