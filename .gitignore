@@ -427,7 +427,7 @@ obj/
 *.db-wal
 
 # Generated XML docs for Swagger (for this project)
-CityInfo.API/CityInfo.APIs.xml
+CityInfo/CityInfo.APIs/CityInfo.APIs.xml
 
-appsettings.Development.json
-appsettings.Production.json
+CityInfo/CityInfo.APIs/appsettings.Development.json
+CityInfo/CityInfo.APIs/appsettings.Production.json
