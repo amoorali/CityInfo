@@ -416,3 +416,18 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Build output
+bin/
+obj/
+
+# SQLite runtime files
+*.db
+*.db-shm
+*.db-wal
+
+# Generated XML docs for Swagger (for this project)
+CityInfo.API/CityInfo.APIs.xml
+
+appsettings.Development.json
+appsettings.Production.json
