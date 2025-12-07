@@ -3,6 +3,7 @@ using CityInfo.APIs.Legacy;
 using CityInfo.Application.Services.Contracts;
 using CityInfo.Application.Services.Implementations;
 using CityInfo.Infrastructure.DbContexts;
+using CityInfo.Infrastructure.Extensions;
 using CityInfo.Infrastructure.Repositories.Contracts;
 using CityInfo.Infrastructure.Repositories.Implementations;
 using Microsoft.AspNetCore.StaticFiles;
@@ -58,20 +59,7 @@ namespace CityInfo.APIs
             });
             builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
-#if DEBUG
-            builder.Services.AddTransient<IMailService, LocalMailService>();
-#else
-            builder.Services.AddTransient<IMailService, CloudMailService>();
-#endif
-
-            builder.Services.AddSingleton<CitiesDataStore>();
-            builder.Services.AddDbContext<CityInfoContext>(
-                dbContextOptions => dbContextOptions.UseSqlite(
-                    builder.Configuration["ConnectionStrings:CityInfoDBConnectionString"]));
-
-            builder.Services.AddScoped<ICityInfoRepository, CityInfoRepository>();
-
-            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddInfrastructureLayer(builder.Configuration);
 
             builder.Services.AddAuthentication("Bearer")
                 .AddJwtBearer(options =>
