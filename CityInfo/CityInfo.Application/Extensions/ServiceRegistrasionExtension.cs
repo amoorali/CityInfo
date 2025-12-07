@@ -11,7 +11,7 @@ namespace CityInfo.Application.Extensions
             services.AddAutoMapper(configAction =>
             {
 
-            }, Assembly.GetExecutingAssembly());
+            }, AppDomain.CurrentDomain.GetAssemblies());
             #endregion
         }
     }

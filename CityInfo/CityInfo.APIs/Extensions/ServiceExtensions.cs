@@ -113,7 +113,7 @@ namespace CityInfo.APIs.Extensions
             //});
             #endregion
 
-            //services.AddSingleton<FileExtensionContentTypeProvider>();
+            services.AddSingleton<FileExtensionContentTypeProvider>();
         }
         #endregion
     }

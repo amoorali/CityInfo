@@ -14,7 +14,7 @@ namespace CityInfo.APIs
 
             builder.Services.AddControllers(options =>
             {
-                options.ReturnHttpNotAcceptable = true;
+                options.ReturnHttpNotAcceptable = false;
             }).AddNewtonsoftJson()
             .AddXmlDataContractSerializerFormatters();
 
