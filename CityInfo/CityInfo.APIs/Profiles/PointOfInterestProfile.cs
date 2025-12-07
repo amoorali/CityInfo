@@ -6,6 +6,7 @@ namespace CityInfo.APIs.Profiles
 {
     public class PointOfInterestProfile : Profile
     {
+        #region [ Constructure ]
         public PointOfInterestProfile()
         {
             CreateMap<PointOfInterest, PointOfInterestDto>();
@@ -13,5 +14,6 @@ namespace CityInfo.APIs.Profiles
             CreateMap<PointOfInterestForUpdateDto, PointOfInterest>();
             CreateMap<PointOfInterest, PointOfInterestForUpdateDto>();
         }
+        #endregion
     }
 }

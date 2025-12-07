@@ -9,13 +9,18 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
 {
     public class CityInfoRepository : ICityInfoRepository
     {
+        #region [ Fields ]
         private readonly CityInfoContext _context;
+        #endregion
 
+        #region [ Cosntructure ]
         public CityInfoRepository(CityInfoContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
+        #endregion
 
+        #region [ City Methods ]
         public async Task<IEnumerable<City>> GetCitiesAsync()
         {
             return await _context.Cities
@@ -70,7 +75,9 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
                 .Where(c => c.Id == cityId)
                 .FirstOrDefaultAsync();
         }
+        #endregion
 
+        #region [ PointOfInterest Methods ]
         public async Task<PointOfInterest?> GetPointOfInterestForCityAsync(int cityId, int pointOfInterestId)
         {
             return await _context.PointsOfInterest
@@ -103,15 +110,20 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
         {
             _context.PointsOfInterest.Remove(pointOfInterest);
         }
+        #endregion
 
+        #region [ Bool Expression Methods ]
         public async Task<bool> CityNameMatchesCityIdAsync(string? cityName, int cityId)
         {
             return await _context.Cities.AnyAsync(c => c.Id == cityId && c.Name == cityName);
         }
+        #endregion
 
+        #region [ Database Methods ]
         public async Task<bool> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync() >= 0;
         }
+        #endregion
     }
 }

@@ -10,15 +10,21 @@ namespace CityInfo.APIs.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
+        #region [ Fields ]
         private readonly IConfiguration _configuration;
+        #endregion
 
         // we won't use this outside of this class, so we can scope it to this namespace
+
+        #region [ Request Body ]
         public class AuthenticationRequestBody
         {
             public string? UserName { get; set; }
             public string? Password { get; set; }
         }
+        #endregion
 
+        #region [ User ]
         public class CityInfoUser
         {
             public int UserId { get; set; }
@@ -27,6 +33,7 @@ namespace CityInfo.APIs.Controllers
             public string LastName { get; set; }
             public string City { get; set; }
 
+            #region [ Constructure ]
             public CityInfoUser(int userId, string userName,
                 string firstName, string lastName, string city)
             {
@@ -36,14 +43,19 @@ namespace CityInfo.APIs.Controllers
                 LastName = lastName;
                 City = city;
             }
+            #endregion
         }
+        #endregion
 
+        #region [ Constructure ]
         public AuthenticationController(IConfiguration configuration)
         {
             _configuration = configuration ??
                 throw new ArgumentNullException(nameof(configuration));
         }
+        #endregion
 
+        #region [ Authentication ]
         [HttpPost("authenticate")]
         public ActionResult<string> Authenticate(
             AuthenticationRequestBody authenticationRequestBody)
@@ -100,5 +112,6 @@ namespace CityInfo.APIs.Controllers
                 "Fallahi",
                 "Antwerp");
         }
+        #endregion
     }
 }

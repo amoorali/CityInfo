@@ -6,7 +6,6 @@ using CityInfo.Infrastructure.Repositories.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace CityInfo.APIs.Controllers
 {
@@ -16,10 +15,13 @@ namespace CityInfo.APIs.Controllers
     [ApiVersion(1)]
     public class CitiesController : ControllerBase
     {
+        #region [ Fields ]
         private readonly ICityInfoRepository _cityInfoRepostory;
         private readonly IMapper _mapper;
         const int maxCitiesPageSize = 20;
+        #endregion
 
+        #region [ Constructor ]
         public CitiesController(ICityInfoRepository cityInfoRepostory,
             IMapper mapper)
         {
@@ -28,7 +30,9 @@ namespace CityInfo.APIs.Controllers
             _mapper = mapper 
                 ?? throw new ArgumentNullException(nameof(mapper));
         }
+        #endregion
 
+        #region [ Cities ]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<City>>> GetCitiesAsync(
             string? name, string? searchQuery, int pageNumber = 1, int pageSize = 10)
@@ -71,5 +75,6 @@ namespace CityInfo.APIs.Controllers
 
             return Ok(_mapper.Map<CityWithoutPointsOfInterestDto>(cityEntity));
         }
+        #endregion
     }
 }

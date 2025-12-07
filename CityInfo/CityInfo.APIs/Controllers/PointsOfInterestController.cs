@@ -17,11 +17,14 @@ namespace CityInfo.APIs.Controllers
     [ApiVersion(2)]
     public class PointsOfInterestController : ControllerBase
     {
+        #region [ Fields ]
         private readonly ILogger<PointsOfInterestController> _logger;
         private readonly IMailService _mailService;
         private readonly ICityInfoRepository _cityInfoRepository;
         private readonly IMapper _mapper;
+        #endregion
 
+        #region [ Constructure ]
         public PointsOfInterestController(ILogger<PointsOfInterestController> logger,
             IMailService mailService,
             ICityInfoRepository cityInfoRepository,
@@ -36,7 +39,9 @@ namespace CityInfo.APIs.Controllers
             _mapper = mapper ??
                 throw new ArgumentNullException(nameof(mapper));
         }
+        #endregion
 
+        #region [ GET Methods ]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PointOfInterestDto>>> GetPointsOfInterestAsync(int cityId)
         {
@@ -76,7 +81,9 @@ namespace CityInfo.APIs.Controllers
 
             return Ok(_mapper.Map<PointOfInterestDto>(pointOfInterest));
         }
+        #endregion
 
+        #region [ POST Methods ]
         [HttpPost]
         public async Task<ActionResult<PointOfInterestDto>> CreatePointOfInterest(
             int cityId,
@@ -103,7 +110,9 @@ namespace CityInfo.APIs.Controllers
                 },
                 createdPointOfInterestToReturn);
         }
+        #endregion
 
+        #region [ PUT Methods ]
         [HttpPut("{pointOfInterestId}")]
         public async Task<ActionResult> UpdatePointOfInterest(int cityId, int pointOfInterestId,
             PointOfInterestForUpdateDto pointOfInterest)
@@ -123,7 +132,9 @@ namespace CityInfo.APIs.Controllers
 
             return NoContent();
         }
+        #endregion
 
+        #region [ PATCH Methods ]
         [HttpPatch("{pointOfInterestId}")]
         public async Task<ActionResult> PartiallyUpdatePointOfInterest(int cityId, int pointOfInterestId,
             JsonPatchDocument<PointOfInterestForUpdateDto> patchDocument)
@@ -153,7 +164,9 @@ namespace CityInfo.APIs.Controllers
 
             return NoContent();
         }
+        #endregion
 
+        #region [ DELETE Methods ]
         [HttpDelete("{pointOfInterestId}")]
         public async Task<ActionResult> DeletePointOfInterestAsync(int cityId, int pointOfInterestId)
         {
@@ -175,5 +188,6 @@ namespace CityInfo.APIs.Controllers
 
             return NoContent();
         }
+        #endregion
     }
 }

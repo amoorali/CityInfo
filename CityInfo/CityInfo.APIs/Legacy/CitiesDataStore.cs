@@ -4,9 +4,12 @@ namespace CityInfo.APIs.Legacy
 {
     public class CitiesDataStore
     {
+        #region [ Fields ]
         public List<CityDto> Cities { get; set; }
         //public static CitiesDataStore Current { get; } = new CitiesDataStore();
+        #endregion
 
+        #region [ Constructure ]
         public CitiesDataStore()
         {
             // init dummy data
@@ -77,5 +80,6 @@ namespace CityInfo.APIs.Legacy
                 }
             };
         }
+        #endregion
     }
 }

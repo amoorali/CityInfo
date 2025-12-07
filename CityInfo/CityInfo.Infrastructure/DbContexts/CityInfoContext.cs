@@ -5,14 +5,19 @@ namespace CityInfo.Infrastructure.DbContexts
 {
     public class CityInfoContext : DbContext
     {
+        #region [ Fields ]
         public DbSet<City> Cities { get; set; }
         public DbSet<PointOfInterest> PointsOfInterest { get; set; }
+        #endregion
 
+        #region [ Constructure ]
         public CityInfoContext(DbContextOptions<CityInfoContext> options)
             : base(options)
         {            
         }
+        #endregion
 
+        #region [ Methods ]
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<City>()
@@ -82,5 +87,6 @@ namespace CityInfo.Infrastructure.DbContexts
 
         //    base.OnConfiguring(optionsBuilder);
         //}
+        #endregion
     }
 }

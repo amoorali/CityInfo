@@ -5,6 +5,7 @@ namespace CityInfo.Domain.Entities
 {
     public class PointOfInterest
     {
+        #region [ Fields ]
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -20,10 +21,13 @@ namespace CityInfo.Domain.Entities
         [ForeignKey("CityId")]
         public City? City { get; set; }
         public int CityId { get; set; }
+        #endregion
 
+        #region [ Constructure ]
         public PointOfInterest(string name)
         {
             Name = name;
         }
+        #endregion
     }
 }

@@ -12,8 +12,11 @@ namespace CityInfo.APIs.Controllers
     [ApiVersion(0.1, Deprecated = true)]
     public class FilesController : ControllerBase
     {
+        #region [ Fields ]
         private readonly FileExtensionContentTypeProvider _fileExtensionContentTypeProvider;
+        #endregion
 
+        #region [ Constructure ]
         public FilesController(
             FileExtensionContentTypeProvider fileExtensionContentTypeProvider)
         {
@@ -21,7 +24,9 @@ namespace CityInfo.APIs.Controllers
                 ?? throw new ArgumentNullException(
                     nameof(fileExtensionContentTypeProvider));
         }
+        #endregion
 
+        #region [ File ]
         [HttpGet("{fileId}")]
         public ActionResult GetFile(string fileId)
         {
@@ -59,5 +64,6 @@ namespace CityInfo.APIs.Controllers
 
             return Ok("Your file has been uploaded successfully.");
         }
+        #endregion
     }
 }

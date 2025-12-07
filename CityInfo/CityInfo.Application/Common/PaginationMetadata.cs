@@ -7,6 +7,7 @@
         public int PageSize { get; set; }
         public int CurrentPage { get; set; }
 
+        #region [ Constructure ]
         public PaginationMetadata(int totalItemCount, int pageSize, int currentPage)
         {
             TotalItemCount = totalItemCount;
@@ -14,5 +15,6 @@
             CurrentPage = currentPage;
             TotalPageCount = (int)Math.Ceiling(TotalItemCount / (double)pageSize);
         }
+        #endregion
     }
 }

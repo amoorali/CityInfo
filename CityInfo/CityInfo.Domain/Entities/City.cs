@@ -5,6 +5,8 @@ namespace CityInfo.Domain.Entities
 {
     public class City
     {
+
+        #region [ Fields ]
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -18,10 +20,13 @@ namespace CityInfo.Domain.Entities
 
         public ICollection<PointOfInterest> PointsOfInterest { get; set; }
             = new List<PointOfInterest>();
+        #endregion
 
+        #region [ Constructure ]
         public City(string name)
         {
             Name = name;
         }
+        #endregion
     }
 }

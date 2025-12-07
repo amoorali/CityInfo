@@ -11,7 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Reflection;
 
-namespace CityInfo.API
+namespace CityInfo.APIs
 {
     public class Program
     {
