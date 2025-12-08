@@ -1,0 +1,45 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@schema=https
+@hostname=localhost
+@port=7211
+
+GET {{schema}}://{{hostname}}:{{port}}/api/v1/cities
+
+###
+GET {{schema}}://{{hostname}}:{{port}}/api/v1/cities
+Accept:application/xml
+
+###
+# @name createpoi
+POST {{schema}}://{{hostname}}:{{port}}/api/v1/cities/1/pointsofinterest
+Accept:application/json
+Content-Type:application/json
+
+{
+  "name": "A name for testing",
+  "description": "A description for testing"
+}
+
+###
+
+@poiid = {{createpoi.response.body.id}}
+
+GET {{schema}}://{{hostname}}:{{port}}/api/v1/cities/1/pointsofinterest/{{poiid}}
+Accept:application/json
+
+###
+
+// get a token
+POST {{schema}}://{{hostname}}:{{port}}/api/authentication/authenticate
+Content-Type:application/json
+
+{
+  "name": "AmiraliFallahi",
+  "password": "MyPassword"
+}
+
+###
+
+// authenticated GET request
+GET {{schema}}://{{hostname}}:{{port}}/api/v1/cities
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZ2l2ZW5fbmFtZSI6IiIsImZhbWlseV9uYW1lIjoiRmFsbGFoaSIsImNpdHkiOiJBbnR3ZXJwIiwibmJmIjoxNzY1MTgyMzc2LCJleHAiOjE3NjUxODU5NzYsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcyMTEiLCJhdWQiOiJjaXR5aW5mb2FwaSJ9.rtYIDpz5NuhgQmV84qjv2y-wsAkyNagLpHcDCXJcu8Q

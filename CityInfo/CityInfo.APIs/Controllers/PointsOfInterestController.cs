@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 namespace CityInfo.APIs.Controllers
 {
     [Route("api/v{version:apiVersion}/cities/{cityId}/pointsofinterest")]
-    //[Authorize(Policy = "MustBeFromAntwerp")]
+    [Authorize(Policy = "MustBeFromAntwerp")]
     [ApiController]
-    [ApiVersion(2)]
+    [ApiVersion(1)]
     public class PointsOfInterestController : ControllerBase
     {
         #region [ Fields ]

@@ -14,9 +14,8 @@ namespace CityInfo.APIs.Controllers
         private readonly IConfiguration _configuration;
         #endregion
 
-        // we won't use this outside of this class, so we can scope it to this namespace
-
         #region [ Request Body ]
+        // we won't use this outside of this class, so we can scope it to this namespace
         public class AuthenticationRequestBody
         {
             public string? UserName { get; set; }
