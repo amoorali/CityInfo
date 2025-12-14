@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
+using Mapster;
 
 namespace CityInfo.Application.Extensions
 {
@@ -7,12 +7,14 @@ namespace CityInfo.Application.Extensions
     {
         public static void ConfigureApplicationLayer(this IServiceCollection services)
         {
-            #region [ AutoMapper ]
-            services.AddAutoMapper(configAction =>
-            {
+            #region [ Mapster ]
+            var config = new TypeAdapterConfig();
 
-            }, AppDomain.CurrentDomain.GetAssemblies());
+            config.Scan(typeof(ServiceRegistrasionExtension).Assembly);
+
+            services.AddMapster();
             #endregion
+
         }
     }
 }
