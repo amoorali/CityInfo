@@ -8,7 +8,7 @@ using System.Linq;
 namespace CityInfo.Infrastructure.Repositories.Implementations
 {
 
-    public class CityInfoRepository : ICityRepository
+    public class CityInfoRepository : ICityInfoRepository
     {
         #region [ Fields ]
         internal readonly CityInfoContext _context;

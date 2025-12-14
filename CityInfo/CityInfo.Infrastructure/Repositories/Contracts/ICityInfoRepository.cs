@@ -1,6 +1,6 @@
 ﻿namespace CityInfo.Infrastructure.Repositories.Contracts
 {
-    public interface ICityRepository
+    public interface ICityInfoRepository
     {
         Task<bool> SaveChangesAsync();
     }
