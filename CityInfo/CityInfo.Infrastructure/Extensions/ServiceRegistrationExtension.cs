@@ -1,8 +1,8 @@
-﻿using CityInfo.Application.Services.Contracts;
-using CityInfo.Application.Services.Implementations;
-using CityInfo.Infrastructure.DbContexts;
+﻿using CityInfo.Infrastructure.DbContexts;
 using CityInfo.Infrastructure.Repositories.Contracts;
 using CityInfo.Infrastructure.Repositories.Implementations;
+using CityInfo.Infrastructure.Services.Contracts;
+using CityInfo.Infrastructure.Services.Implementations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +32,11 @@ namespace CityInfo.Infrastructure.Extensions
 #else
             services.AddTransient<IMailService, CloudMailService>();
 #endif
+
+            #region [ UnitOfWork ]
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            #endregion
+
             #endregion
         }
     }

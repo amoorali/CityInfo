@@ -1,6 +1,9 @@
-﻿namespace CityInfo.Infrastructure.DbContexts
+﻿using CityInfo.Infrastructure.DbContexts;
+using CityInfo.Infrastructure.Services.Contracts;
+
+namespace CityInfo.Infrastructure.Services.Implementations
 {
-    public class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly CityInfoContext _context;
 
