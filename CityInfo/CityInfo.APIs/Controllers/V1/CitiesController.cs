@@ -10,7 +10,7 @@ using System.Text.Json;
 namespace CityInfo.APIs.Controllers.V1
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [ApiVersion(1)]
     [Route("api/v{version:apiVersion}/cities")]
     public class CitiesController : ControllerBase
@@ -32,7 +32,7 @@ namespace CityInfo.APIs.Controllers.V1
         }
         #endregion
 
-        #region [ Cities ]
+        #region [ GET Methods ]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<City>>> GetCitiesAsync(
             string? name, string? searchQuery, int pageNumber = 1, int pageSize = 10)

@@ -8,23 +8,16 @@ using System.Linq;
 namespace CityInfo.Infrastructure.Repositories.Implementations
 {
 
-    public class CityInfoRepository : ICityInfoRepository
+    public class GeneralRepository
     {
         #region [ Fields ]
-        internal readonly CityInfoContext _context;
+        protected readonly CityInfoContext _context;
         #endregion
 
         #region [ Cosntructure ]
-        public CityInfoRepository(CityInfoContext context)
+        public GeneralRepository(CityInfoContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
-        #endregion
-
-        #region [ Database Methods ]
-        public async Task<bool> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync() >= 0;
         }
         #endregion
     }

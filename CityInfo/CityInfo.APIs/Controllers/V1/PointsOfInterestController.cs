@@ -2,6 +2,7 @@
 using AutoMapper;
 using CityInfo.Application.DTOs;
 using CityInfo.Application.Services.Contracts;
+using CityInfo.Infrastructure.DbContexts;
 using CityInfo.Infrastructure.Repositories.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace CityInfo.APIs.Controllers.V1
 {
     [ApiController]
-    [Authorize(Policy = "MustBeFromAntwerp")]
+    //[Authorize(Policy = "MustBeFromAntwerp")]
     [ApiVersion(1)]
     [Route("api/v{version:apiVersion}/cities/{cityId}/pointsofinterest")]
     public class PointsOfInterestController : ControllerBase
@@ -22,6 +23,7 @@ namespace CityInfo.APIs.Controllers.V1
         private readonly IMailService _mailService;
         private readonly ICityRepository _cityRepository;
         private readonly IPointOfInterestRepository _pointOfInterestRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         #endregion
 
@@ -30,6 +32,7 @@ namespace CityInfo.APIs.Controllers.V1
             IMailService mailService,
             ICityRepository cityRepository,
             IPointOfInterestRepository pointOfInterestRepository,
+            IUnitOfWork unitOfWork,
             IMapper mapper)
         {
             _logger = logger ??
@@ -40,6 +43,8 @@ namespace CityInfo.APIs.Controllers.V1
                 throw new ArgumentNullException(nameof(cityRepository));
             _pointOfInterestRepository = pointOfInterestRepository ??
                 throw new ArgumentNullException(nameof(pointOfInterestRepository));
+            _unitOfWork = unitOfWork ??
+                throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ??
                 throw new ArgumentNullException(nameof(mapper));
         }
@@ -98,10 +103,10 @@ namespace CityInfo.APIs.Controllers.V1
 
             var finalPointOfInterest = _mapper.Map<Domain.Entities.PointOfInterest>(pointOfInterest);
 
-            await _pointOfInterestRepository.AddPointOfInterestForCityAsync(
+            await _cityRepository.AddPointOfInterestForCityAsync(
                 cityId, finalPointOfInterest);
 
-            await _cityRepository.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             var createdPointOfInterestToReturn =
                 _mapper.Map<PointOfInterestDto>(finalPointOfInterest);
@@ -132,7 +137,7 @@ namespace CityInfo.APIs.Controllers.V1
 
             _mapper.Map(pointOfInterest, pointOfInterestEntity);
 
-            await _cityRepository.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             return NoContent();
         }
@@ -164,7 +169,7 @@ namespace CityInfo.APIs.Controllers.V1
 
             _mapper.Map(pointOfInterestToPatch, pointOfInterestEntity);
 
-            await _cityRepository.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             return NoContent();
         }
@@ -185,7 +190,7 @@ namespace CityInfo.APIs.Controllers.V1
 
             _pointOfInterestRepository.DeletePointOfInterest(pointOfInterestEntity);
 
-            await _cityRepository.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             _mailService.Send("Point of interest deleted.",
                 $"Point of interest {pointOfInterestEntity.Name} with id {pointOfInterestEntity.Id} was deleted.");

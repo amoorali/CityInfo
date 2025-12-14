@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace CityInfo.APIs.Controllers.V2
 {
     [ApiController]
-    [Authorize(Policy = "MustBeFromAntwerp")]
+    //[Authorize(Policy = "MustBeFromAntwerp")]
     [ApiVersion(2)]
     [Route("api/v{version:apiVersion}/cities/{cityId}/pointsofinterest")]
     public class PointsOfInterestController : ControllerBase
@@ -26,7 +26,6 @@ namespace CityInfo.APIs.Controllers.V2
 
         #region [ Constructure ]
         public PointsOfInterestController(ILogger<PointsOfInterestController> logger,
-            IMailService mailService,
             ICityRepository cityRepository,
             IPointOfInterestRepository pointOfInterestRepository,
             IMapper mapper)

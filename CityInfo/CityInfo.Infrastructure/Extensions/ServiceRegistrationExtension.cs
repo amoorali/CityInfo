@@ -22,7 +22,8 @@ namespace CityInfo.Infrastructure.Extensions
             #endregion
 
             #region [ Repositories ]
-            services.AddScoped<ICityRepository, CityInfoRepository>();
+            services.AddScoped<ICityRepository, CityRepository>();
+            services.AddScoped<IPointOfInterestRepository, PointOfInterestRepository>();
             #endregion
 
             #region [ Services ]

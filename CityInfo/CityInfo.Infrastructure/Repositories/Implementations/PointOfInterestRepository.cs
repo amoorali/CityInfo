@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CityInfo.Infrastructure.Repositories.Implementations
 {
-    public class PointOfInterestRepository : CityInfoRepository, IPointOfInterestRepository
+    public class PointOfInterestRepository : GeneralRepository, IPointOfInterestRepository
     {
         #region [ Constructor ]
         public PointOfInterestRepository(CityInfoContext _context) : base(_context)

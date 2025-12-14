@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CityInfo.Infrastructure.Repositories.Implementations
 {
-    public class CityRepository : CityInfoRepository, ICityRepository
+    public class CityRepository : GeneralRepository, ICityRepository
     {
         #region [ Constructor ]
         public CityRepository(CityInfoContext _context) : base(_context)
