@@ -19,23 +19,24 @@ namespace CityInfo.APIs.Controllers.V2
     {
         #region [ Fields ]
         private readonly ILogger<PointsOfInterestController> _logger;
-        private readonly IMailService _mailService;
-        private readonly ICityInfoRepository _cityInfoRepository;
+        private readonly ICityRepository _cityRepository;
+        private readonly IPointOfInterestRepository _pointOfInterestRepository;
         private readonly IMapper _mapper;
         #endregion
 
         #region [ Constructure ]
         public PointsOfInterestController(ILogger<PointsOfInterestController> logger,
             IMailService mailService,
-            ICityInfoRepository cityInfoRepository,
+            ICityRepository cityRepository,
+            IPointOfInterestRepository pointOfInterestRepository,
             IMapper mapper)
         {
             _logger = logger ??
                 throw new ArgumentNullException(nameof(logger));
-            _mailService = mailService ??
-                throw new ArgumentNullException(nameof(mailService));
-            _cityInfoRepository = cityInfoRepository ??
-                throw new ArgumentNullException(nameof(cityInfoRepository));
+            _cityRepository = cityRepository ??
+                throw new ArgumentNullException(nameof(cityRepository));
+            _pointOfInterestRepository = pointOfInterestRepository ??
+                throw new ArgumentNullException(nameof(pointOfInterestRepository));
             _mapper = mapper ??
                 throw new ArgumentNullException(nameof(mapper));
         }
@@ -47,17 +48,17 @@ namespace CityInfo.APIs.Controllers.V2
         {
             var cityName = User.Claims.First(c => c.Type == "city").Value;
 
-            if (!await _cityInfoRepository.CityNameMatchesCityIdAsync(cityName, cityId))
+            if (!await _cityRepository.CityNameMatchesCityIdAsync(cityName, cityId))
                 return Forbid();
 
-            if (!await _cityInfoRepository.CityExistsAsync(cityId))
+            if (!await _cityRepository.CityExistsAsync(cityId))
             {
                 _logger.LogInformation($"City with id {cityId} wasn't found when accessing points of interest");
 
                 return NotFound("City not found");
             }
 
-            var pointsOfInterest = await _cityInfoRepository
+            var pointsOfInterest = await _pointOfInterestRepository
                 .GetPointsOfInterestForCityAsync(cityId);
 
             return Ok(_mapper.Map<IEnumerable<PointOfInterestDto>>(pointsOfInterest));
@@ -67,14 +68,14 @@ namespace CityInfo.APIs.Controllers.V2
         [HttpGet("{pointOfInterestId}", Name = "GetPointOfInterest")]
         public async Task<ActionResult<PointOfInterestDto>> GetPointOfInterestAsync(int cityId, int pointOfInterestId)
         {
-            if (!await _cityInfoRepository.CityExistsAsync(cityId))
+            if (!await _cityRepository.CityExistsAsync(cityId))
             {
                 _logger.LogInformation($"City with id {cityId} wasn't found when accessing points of interest");
 
                 return NotFound("City not found");
             }
 
-            var pointOfInterest = await _cityInfoRepository.GetPointOfInterestForCityAsync(cityId, pointOfInterestId);
+            var pointOfInterest = await _pointOfInterestRepository.GetPointOfInterestForCityAsync(cityId, pointOfInterestId);
 
             if (pointOfInterest == null)
                 return NotFound("City not found");

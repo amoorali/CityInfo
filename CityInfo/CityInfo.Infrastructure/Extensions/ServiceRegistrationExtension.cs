@@ -22,7 +22,7 @@ namespace CityInfo.Infrastructure.Extensions
             #endregion
 
             #region [ Repositories ]
-            services.AddScoped<ICityInfoRepository, CityInfoRepository>();
+            services.AddScoped<ICityRepository, CityInfoRepository>();
             #endregion
 
             #region [ Services ]

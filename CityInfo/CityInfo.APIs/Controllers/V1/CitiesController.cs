@@ -16,17 +16,17 @@ namespace CityInfo.APIs.Controllers.V1
     public class CitiesController : ControllerBase
     {
         #region [ Fields ]
-        private readonly ICityInfoRepository _cityInfoRepostory;
+        private readonly ICityRepository _cityRepostory;
         private readonly IMapper _mapper;
         const int maxCitiesPageSize = 20;
         #endregion
 
         #region [ Constructor ]
-        public CitiesController(ICityInfoRepository cityInfoRepostory,
+        public CitiesController(ICityRepository cityRepostory,
             IMapper mapper)
         {
-            _cityInfoRepostory = cityInfoRepostory ??
-                throw new ArgumentNullException(nameof(cityInfoRepostory));
+            _cityRepostory = cityRepostory ??
+                throw new ArgumentNullException(nameof(cityRepostory));
             _mapper = mapper 
                 ?? throw new ArgumentNullException(nameof(mapper));
         }
@@ -40,7 +40,7 @@ namespace CityInfo.APIs.Controllers.V1
             if (pageSize > maxCitiesPageSize)
                 pageSize = maxCitiesPageSize;
 
-            var (cityEntities, paginationMetadata) = await _cityInfoRepostory
+            var (cityEntities, paginationMetadata) = await _cityRepostory
                 .GetCitiesAsync(name, searchQuery, pageNumber, pageSize);
 
             Response.Headers.Add("X-Pagination",
@@ -65,7 +65,7 @@ namespace CityInfo.APIs.Controllers.V1
         public async Task<IActionResult> GetCityAsync(
             int cityId, bool includePointsOfInterest = false)
         {
-            var cityEntity = await _cityInfoRepostory.GetCityAsync(cityId, includePointsOfInterest);
+            var cityEntity = await _cityRepostory.GetCityAsync(cityId, includePointsOfInterest);
 
             if (cityEntity == null)
                 return NotFound("The id isn't in the collection");
