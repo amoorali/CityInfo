@@ -4,14 +4,13 @@ using CityInfo.Application.DTOs;
 using CityInfo.Infrastructure.Repositories.Contracts;
 using CityInfo.Infrastructure.Services.Contracts;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CityInfo.APIs.Controllers.V1
 {
     [ApiController]
-    //[Authorize(Policy = "MustBeFromAntwerp")]
+    [Authorize(Policy = "MustBeFromAntwerp")]
     [ApiVersion(1)]
     [Route("api/v{version:apiVersion}/cities/{cityId}/pointsofinterest")]
     public class PointsOfInterestController : ControllerBase

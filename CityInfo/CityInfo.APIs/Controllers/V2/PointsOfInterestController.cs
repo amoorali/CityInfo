@@ -3,13 +3,12 @@ using MapsterMapper;
 using CityInfo.Application.DTOs;
 using CityInfo.Infrastructure.Repositories.Contracts;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CityInfo.APIs.Controllers.V2
 {
     [ApiController]
-    //[Authorize(Policy = "MustBeFromAntwerp")]
+    [Authorize(Policy = "MustBeFromAntwerp")]
     [ApiVersion(2)]
     [Route("api/v{version:apiVersion}/cities/{cityId}/pointsofinterest")]
     public class PointsOfInterestController : ControllerBase
