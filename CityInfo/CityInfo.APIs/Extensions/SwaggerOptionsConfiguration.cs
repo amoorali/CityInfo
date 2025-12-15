@@ -25,6 +25,8 @@ namespace CityInfo.APIs.Extensions
             {
                 options.SwaggerDoc(description.GroupName, CreateVersionInfo(description));
             }
+
+            options.AddSecurityDefinition("CityInfoApiBearerAuth", CreateSecurityScheme());
         }
 
         public void Configure(string name, SwaggerGenOptions options)
@@ -50,6 +52,19 @@ namespace CityInfo.APIs.Extensions
             }
 
             return info;
+        }
+
+        private static OpenApiSecurityScheme CreateSecurityScheme()
+        {
+            return new OpenApiSecurityScheme()
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "JWT Authorization header using the bearer scheme.\r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\""
+            };
         }
         #endregion
     }
