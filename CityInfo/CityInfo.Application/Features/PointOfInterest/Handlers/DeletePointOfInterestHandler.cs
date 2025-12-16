@@ -1,4 +1,5 @@
-﻿using CityInfo.Application.Features.PointOfInterest.Commands;
+﻿using CityInfo.Application.Features.BaseImplementations;
+using CityInfo.Application.Features.PointOfInterest.Commands;
 using CityInfo.Application.Features.PointOfInterest.Results;
 using CityInfo.Application.Services.Contracts;
 using MapsterMapper;

@@ -1,7 +1,7 @@
 ﻿using Asp.Versioning;
 using CityInfo.Application.DTOs;
+using CityInfo.Application.Services.Contracts;
 using CityInfo.Domain.Entities;
-using CityInfo.Infrastructure.Services.Contracts;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

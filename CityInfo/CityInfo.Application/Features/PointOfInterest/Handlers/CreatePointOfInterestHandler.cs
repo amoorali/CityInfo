@@ -4,6 +4,7 @@ using MediatR;
 using CityInfo.Application.DTOs;
 using CityInfo.Application.Features.PointOfInterest.Commands;
 using CityInfo.Application.Features.PointOfInterest.Results;
+using CityInfo.Application.Features.BaseImplementations;
 
 namespace CityInfo.Application.Features.PointOfInterest.Handlers
 {

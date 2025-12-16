@@ -1,11 +1,10 @@
 ﻿using Asp.Versioning;
-using MapsterMapper;
 using CityInfo.Domain.Entities;
-using CityInfo.Application.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using CityInfo.Infrastructure.Services.Contracts;
+using MediatR;
+using CityInfo.Application.Features.City.Queries;
 
 namespace CityInfo.APIs.Controllers.V1
 {
@@ -16,19 +15,15 @@ namespace CityInfo.APIs.Controllers.V1
     public class CitiesController : ControllerBase
     {
         #region [ Fields ]
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
         const int maxCitiesPageSize = 20;
         #endregion
 
         #region [ Constructor ]
-        public CitiesController(IUnitOfWork unitOfWork,
-            IMapper mapper)
+        public CitiesController(IMediator mediator)
         {
-            _unitOfWork = unitOfWork ??
-                throw new ArgumentNullException(nameof(unitOfWork));
-            _mapper = mapper
-                ?? throw new ArgumentNullException(nameof(mapper));
+            _mediator = mediator ??
+                throw new ArgumentNullException(nameof(mediator));
         }
         #endregion
 
@@ -40,13 +35,12 @@ namespace CityInfo.APIs.Controllers.V1
             if (pageSize > maxCitiesPageSize)
                 pageSize = maxCitiesPageSize;
 
-            var (cityEntities, paginationMetadata) = await _unitOfWork.Cities
-                .GetCitiesAsync(name, searchQuery, pageNumber, pageSize);
+            var result = await _mediator.Send(new GetCitiesQuery(name, searchQuery, pageNumber, pageSize))
 
             Response.Headers.Add("X-Pagination",
-                JsonSerializer.Serialize(paginationMetadata));
+                JsonSerializer.Serialize(result.PaginationMetaData));
 
-            return Ok(_mapper.Map<IEnumerable<CityWithoutPointsOfInterestDto>>(cityEntities));
+            return Ok(result.Items);
         }
 
         /// <summary>
@@ -65,16 +59,15 @@ namespace CityInfo.APIs.Controllers.V1
         public async Task<IActionResult> GetCityAsync(
             int cityId, bool includePointsOfInterest = false)
         {
-            var cityEntity = await _unitOfWork.Cities
-                .GetCityAsync(cityId, includePointsOfInterest);
+            var result = await _mediator.Send(new GetCityQuery(cityId, includePointsOfInterest));
 
-            if (cityEntity == null)
+            if (result.NotFound)
                 return NotFound("The id isn't in the collection");
 
             if (includePointsOfInterest)
-                return Ok(_mapper.Map<CityDto>(cityEntity));
+                return Ok(result.DtoWithPointsOfInterest);
 
-            return Ok(_mapper.Map<CityWithoutPointsOfInterestDto>(cityEntity));
+            return Ok(result.DtoWithoutPointsOfInterest);
         }
         #endregion
     }
