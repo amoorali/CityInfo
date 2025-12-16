@@ -10,8 +10,8 @@ namespace CityInfo.Application.Features.Handlers.PointOfInterest
     public class CreatePointOfInterestHandler : GeneralHandler,
         IRequestHandler<CreatePointOfInterestCommand, CreatePointOfInterestResult>
     {
-        public CreatePointOfInterestHandler(IUnitOfWork unitOfWork, IMapper mapper)
-            : base(unitOfWork, mapper)
+        public CreatePointOfInterestHandler(IUnitOfWork unitOfWork, IMapper mapper, IMailService mailService)
+            : base(unitOfWork, mapper, mailService)
         {
         }
 

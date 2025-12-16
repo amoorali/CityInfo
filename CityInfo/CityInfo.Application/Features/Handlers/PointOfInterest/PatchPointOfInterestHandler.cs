@@ -10,8 +10,8 @@ namespace CityInfo.Application.Features.Handlers.PointOfInterest
     public class PatchPointOfInterestHandler : GeneralHandler,
         IRequestHandler<PatchPointOfInterestCommand, PatchPointOfInterestResult>
     {
-        public PatchPointOfInterestHandler(IUnitOfWork unitOfWork, IMapper mapper)
-            : base(unitOfWork, mapper)
+        public PatchPointOfInterestHandler(IUnitOfWork unitOfWork, IMapper mapper, IMailService mailService)
+            : base(unitOfWork, mapper, mailService)
         {
         }
 

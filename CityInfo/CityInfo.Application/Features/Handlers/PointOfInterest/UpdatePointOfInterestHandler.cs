@@ -9,8 +9,8 @@ namespace CityInfo.Application.Features.Handlers.PointOfInterest
     public class UpdatePointOfInterestHandler : GeneralHandler,
         IRequestHandler<UpdatePointOfInterestCommand, UpdatePointOfInterestResult>
     {
-        public UpdatePointOfInterestHandler(IUnitOfWork unitOfWork, IMapper mapper)
-            : base(unitOfWork, mapper)
+        public UpdatePointOfInterestHandler(IUnitOfWork unitOfWork, IMapper mapper, IMailService mailService)
+            : base(unitOfWork, mapper, mailService)
         {
         }
 
