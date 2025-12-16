@@ -1,6 +1,6 @@
-﻿using CityInfo.Infrastructure.Repositories.Contracts;
+﻿using CityInfo.Application.Repositories.Contracts;
 
-namespace CityInfo.Infrastructure.Services.Contracts
+namespace CityInfo.Application.Services.Contracts
 {
     public interface IUnitOfWork : IDisposable
     {

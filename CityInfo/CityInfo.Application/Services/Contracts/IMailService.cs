@@ -1,4 +1,4 @@
-﻿namespace CityInfo.Infrastructure.Services.Contracts
+﻿namespace CityInfo.Application.Services.Contracts
 {
     public interface IMailService
     {

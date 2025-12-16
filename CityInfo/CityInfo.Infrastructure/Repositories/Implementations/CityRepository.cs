@@ -1,7 +1,7 @@
 ﻿using CityInfo.Application.Common;
+using CityInfo.Application.Repositories.Contracts;
 using CityInfo.Domain.Entities;
 using CityInfo.Infrastructure.DbContexts;
-using CityInfo.Infrastructure.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 
 namespace CityInfo.Infrastructure.Repositories.Implementations

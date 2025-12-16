@@ -1,7 +1,7 @@
-﻿using CityInfo.Infrastructure.DbContexts;
-using CityInfo.Infrastructure.Repositories.Contracts;
+﻿using CityInfo.Application.Repositories.Contracts;
+using CityInfo.Application.Services.Contracts;
+using CityInfo.Infrastructure.DbContexts;
 using CityInfo.Infrastructure.Repositories.Implementations;
-using CityInfo.Infrastructure.Services.Contracts;
 using CityInfo.Infrastructure.Services.Implementations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

@@ -1,6 +1,6 @@
 ﻿using CityInfo.Domain.Entities;
 
-namespace CityInfo.Infrastructure.Repositories.Contracts
+namespace CityInfo.Application.Repositories.Contracts
 {
     public interface IPointOfInterestRepository : IRepository<PointOfInterest>
     {

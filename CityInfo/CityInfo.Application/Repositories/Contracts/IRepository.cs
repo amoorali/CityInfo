@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace CityInfo.Infrastructure.Repositories.Contracts
+namespace CityInfo.Application.Repositories.Contracts
 {
     public interface IRepository<TEntity> where TEntity : class
     {
