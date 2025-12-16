@@ -1,8 +1,6 @@
 ﻿using Asp.Versioning;
 using CityInfo.Application.DTOs;
 using CityInfo.Application.Features.PointOfInterest.Queries;
-using CityInfo.Application.Services.Contracts;
-using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

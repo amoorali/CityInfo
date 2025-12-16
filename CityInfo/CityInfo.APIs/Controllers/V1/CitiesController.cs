@@ -35,7 +35,7 @@ namespace CityInfo.APIs.Controllers.V1
             if (pageSize > maxCitiesPageSize)
                 pageSize = maxCitiesPageSize;
 
-            var result = await _mediator.Send(new GetCitiesQuery(name, searchQuery, pageNumber, pageSize))
+            var result = await _mediator.Send(new GetCitiesQuery(name, searchQuery, pageNumber, pageSize));
 
             Response.Headers.Add("X-Pagination",
                 JsonSerializer.Serialize(result.PaginationMetaData));
