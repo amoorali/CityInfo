@@ -1,6 +1,6 @@
 ﻿using CityInfo.Application.DTOs;
 
-namespace CityInfo.Application.Features.Results.PointOfInterest
+namespace CityInfo.Application.Features.PointOfInterest.Results
 {
     public record PatchPointOfInterestResult(
         bool CityNotFound,

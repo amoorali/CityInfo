@@ -1,10 +1,10 @@
-﻿using CityInfo.Application.Features.Commands.PointOfInterest;
-using CityInfo.Application.Features.Results.PointOfInterest;
+﻿using CityInfo.Application.Features.PointOfInterest.Commands;
+using CityInfo.Application.Features.PointOfInterest.Results;
 using CityInfo.Application.Services.Contracts;
 using MapsterMapper;
 using MediatR;
 
-namespace CityInfo.Application.Features.Handlers.PointOfInterest
+namespace CityInfo.Application.Features.PointOfInterest.Handlers
 {
     public class UpdatePointOfInterestHandler : GeneralHandler,
         IRequestHandler<UpdatePointOfInterestCommand, UpdatePointOfInterestResult>

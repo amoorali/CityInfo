@@ -1,7 +1,7 @@
 ﻿using CityInfo.Application.Services.Contracts;
 using MapsterMapper;
 
-namespace CityInfo.Application.Features.Handlers.PointOfInterest
+namespace CityInfo.Application.Features.PointOfInterest.Handlers
 {
     public class GeneralHandler
     {

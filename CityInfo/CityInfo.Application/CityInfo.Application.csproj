@@ -19,4 +19,8 @@
     <ProjectReference Include="..\CityInfo.Domain\CityInfo.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\PointOfInterest\Queries\" />
+  </ItemGroup>
+
 </Project>

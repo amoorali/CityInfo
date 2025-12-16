@@ -1,8 +1,8 @@
 ﻿using CityInfo.Application.DTOs;
-using CityInfo.Application.Features.Results.PointOfInterest;
+using CityInfo.Application.Features.PointOfInterest.Results;
 using MediatR;
 
-namespace CityInfo.Application.Features.Commands.PointOfInterest
+namespace CityInfo.Application.Features.PointOfInterest.Commands
 {
     public record UpdatePointOfInterestCommand(
         int CityId,
