@@ -1,7 +1,9 @@
 ﻿using Asp.Versioning;
 using CityInfo.Application.DTOs;
-using CityInfo.Infrastructure.Services.Contracts;
+using CityInfo.Application.Features.PointOfInterest.Queries;
+using CityInfo.Application.Services.Contracts;
 using MapsterMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,21 +17,17 @@ namespace CityInfo.APIs.Controllers.V2
     {
         #region [ Fields ]
         private readonly ILogger<PointsOfInterestController> _logger;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
         #endregion
 
         #region [ Constructure ]
         public PointsOfInterestController(ILogger<PointsOfInterestController> logger,
-            IUnitOfWork unitOfWork,
-            IMapper mapper)
+            IMediator mediator)
         {
             _logger = logger ??
                 throw new ArgumentNullException(nameof(logger));
-            _unitOfWork = unitOfWork ??
-                throw new ArgumentNullException(nameof(unitOfWork));
-            _mapper = mapper ??
-                throw new ArgumentNullException(nameof(mapper));
+            _mediator = mediator ??
+                throw new ArgumentNullException(nameof(mediator));
         }
         #endregion
 
@@ -39,39 +37,38 @@ namespace CityInfo.APIs.Controllers.V2
         {
             var cityName = User.Claims.First(c => c.Type == "city").Value;
 
-            if (!await _unitOfWork.Cities.CityNameMatchesCityIdAsync(cityName, cityId))
+            var result = await _mediator.Send(new GetPointsOfInterestQuery(cityId, cityName));
+
+            if (result.Forbid)
                 return Forbid();
 
-            if (!await _unitOfWork.Cities.CityExistsAsync(cityId))
+            else if (result.CityNotFound)
             {
                 _logger.LogInformation($"City with id {cityId} wasn't found when accessing points of interest");
 
                 return NotFound("City not found");
             }
 
-            var pointsOfInterest = await _unitOfWork.PointsOfInterest
-                .GetPointsOfInterestForCityAsync(cityId);
+            return Ok(result.Items);
 
-            return Ok(_mapper.Map<IEnumerable<PointOfInterestDto>>(pointsOfInterest));
-            
         }
 
         [HttpGet("{pointOfInterestId}", Name = "GetPointOfInterest")]
         public async Task<ActionResult<PointOfInterestDto>> GetPointOfInterestAsync(int cityId, int pointOfInterestId)
         {
-            if (!await _unitOfWork.Cities.CityExistsAsync(cityId))
+            var result = await _mediator.Send(new GetPointOfInterestQuery(cityId, pointOfInterestId));
+
+            if (result.CityNotFound)
             {
                 _logger.LogInformation($"City with id {cityId} wasn't found when accessing points of interest");
 
                 return NotFound("City not found");
             }
 
-            var pointOfInterest = await _unitOfWork.PointsOfInterest.GetPointOfInterestForCityAsync(cityId, pointOfInterestId);
+            if (result.PointOfInterestNotFound)
+                return NotFound("Point of interest not found");
 
-            if (pointOfInterest == null)
-                return NotFound("City not found");
-
-            return Ok(_mapper.Map<PointOfInterestDto>(pointOfInterest));
+            return Ok(result.Item);
         }
         #endregion
     }
