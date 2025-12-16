@@ -19,19 +19,19 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
             CancellationToken cancellationToken)
         {
             if (!await UnitOfWork.Cities.CityExistsAsync(request.CityId))
-                return new UpdatePointOfInterestResult(false, false);
+                return new UpdatePointOfInterestResult(true, true);
 
             var entity = await UnitOfWork.PointsOfInterest
                 .GetPointOfInterestForCityAsync(request.CityId, request.PointOfInterestId);
 
             if (entity == null)
-                return new UpdatePointOfInterestResult(true, false);
+                return new UpdatePointOfInterestResult(false, true);
 
             Mapper.Map(request.Dto, entity);
 
             await UnitOfWork.SaveChangesAsync(cancellationToken);
 
-            return new UpdatePointOfInterestResult(true, true);
+            return new UpdatePointOfInterestResult(false, false);
         }
     }
 }

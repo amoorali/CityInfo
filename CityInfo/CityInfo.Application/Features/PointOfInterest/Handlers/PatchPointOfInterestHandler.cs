@@ -20,13 +20,13 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
             CancellationToken cancellationToken)
         {
             if (!await UnitOfWork.Cities.CityExistsAsync(request.CityId))
-                return new PatchPointOfInterestResult(false, false, null, null);
+                return new PatchPointOfInterestResult(true, true, null, null);
 
             var entity = await UnitOfWork.PointsOfInterest
                 .GetPointOfInterestForCityAsync(request.CityId, request.PointOfInterestId);
 
             if (entity == null)
-                return new PatchPointOfInterestResult(true, false, null, null);
+                return new PatchPointOfInterestResult(false, true, null, null);
 
             var dtoToPatch = Mapper.Map<PointOfInterestForUpdateDto>(entity);
 
@@ -48,7 +48,7 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
 
             await UnitOfWork.SaveChangesAsync(cancellationToken);
 
-            return new PatchPointOfInterestResult(true, true, dtoToPatch, null);
+            return new PatchPointOfInterestResult(false, false, dtoToPatch, null);
         }
     }
 }
