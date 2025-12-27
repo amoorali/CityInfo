@@ -26,17 +26,16 @@ namespace CityInfo.Infrastructure.Extensions
             services.AddScoped<IPointOfInterestRepository, PointOfInterestRepository>();
             #endregion
 
-            #region [ Services ]
+            #region [ UnitOfWork ]
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            #endregion
+
+            #region [ Mail Services ]
 #if DEBUG
             services.AddTransient<IMailService, LocalMailService>();
 #else
             services.AddTransient<IMailService, CloudMailService>();
 #endif
-
-            #region [ UnitOfWork ]
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            #endregion
-
             #endregion
         }
     }
