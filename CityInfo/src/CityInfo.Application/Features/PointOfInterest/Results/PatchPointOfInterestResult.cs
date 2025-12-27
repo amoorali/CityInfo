@@ -1,4 +1,4 @@
-﻿using CityInfo.Application.DTOs;
+﻿using CityInfo.Application.DTOs.PointOfInterest;
 
 namespace CityInfo.Application.Features.PointOfInterest.Results
 {

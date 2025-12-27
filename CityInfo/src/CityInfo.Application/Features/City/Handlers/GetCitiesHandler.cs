@@ -1,4 +1,4 @@
-﻿using CityInfo.Application.DTOs;
+﻿using CityInfo.Application.DTOs.City;
 using CityInfo.Application.Features.BaseImplementations;
 using CityInfo.Application.Features.City.Queries;
 using CityInfo.Application.Features.City.Results;

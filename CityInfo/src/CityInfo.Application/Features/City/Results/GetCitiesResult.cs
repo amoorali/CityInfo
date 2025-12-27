@@ -1,5 +1,5 @@
 ﻿using CityInfo.Application.Common;
-using CityInfo.Application.DTOs;
+using CityInfo.Application.DTOs.City;
 
 namespace CityInfo.Application.Features.City.Results
 {

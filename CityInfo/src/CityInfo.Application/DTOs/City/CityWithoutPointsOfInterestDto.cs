@@ -1,4 +1,4 @@
-﻿namespace CityInfo.Application.DTOs
+﻿namespace CityInfo.Application.DTOs.City
 {
     /// <summary>
     /// A city without points of interest

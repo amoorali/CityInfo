@@ -1,4 +1,4 @@
-﻿namespace CityInfo.Application.DTOs
+﻿namespace CityInfo.Application.DTOs.PointOfInterest
 {
     public class PointOfInterestDto
     {

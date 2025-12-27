@@ -1,4 +1,5 @@
-﻿using CityInfo.Application.DTOs;
+﻿using CityInfo.Application.DTOs.City;
+using CityInfo.Application.DTOs.PointOfInterest;
 
 namespace CityInfo.APIs.Legacy
 {

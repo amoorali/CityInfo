@@ -1,6 +1,6 @@
 ﻿using Mapster;
-using CityInfo.Application.DTOs;
 using CityInfo.Domain.Entities;
+using CityInfo.Application.DTOs.City;
 
 namespace CityInfo.Application.Mapping
 {

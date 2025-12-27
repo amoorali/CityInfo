@@ -1,5 +1,5 @@
 ﻿using Asp.Versioning;
-using CityInfo.Application.DTOs;
+using CityInfo.Application.DTOs.PointOfInterest;
 using CityInfo.Application.Features.PointOfInterest.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
