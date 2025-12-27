@@ -3,7 +3,6 @@
 namespace CityInfo.Application.Features.PointOfInterest.Results
 {
     public record PatchPointOfInterestResult(
-        bool PatchDocumentIsNull,
         bool CityNotFound,
         bool PointOfInterestNotFound,
         PointOfInterestForUpdateDto? DtoToValidate,

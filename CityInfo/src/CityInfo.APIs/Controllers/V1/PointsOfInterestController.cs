@@ -120,9 +120,6 @@ namespace CityInfo.APIs.Controllers.V1
         {
             var result = await _mediator.Send(new PatchPointOfInterestCommand(cityId, pointOfInterestId, patchDocument));
 
-            if (result.PatchDocumentIsNull)
-                return BadRequest("Invalid Patch Document");
-
             if (result.CityNotFound)
                 return NotFound("City not found!");
 
