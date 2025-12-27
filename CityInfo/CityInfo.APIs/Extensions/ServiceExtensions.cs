@@ -45,7 +45,7 @@ namespace CityInfo.APIs.Extensions
         {
             if (env.IsDevelopment())
             {
-                var apiVersionDescriptionProvider = 
+                var apiVersionDescriptionProvider =
                     app.ApplicationServices.GetRequiredService<IApiVersionDescriptionProvider>();
 
                 app.UseSwagger();
@@ -100,16 +100,24 @@ namespace CityInfo.APIs.Extensions
         public static void ConfigureServices(this IServiceCollection services)
         {
             #region [ Problem Details ]
-            services.AddProblemDetails();
+            services.AddProblemDetails(options =>
+            {
+                options.CustomizeProblemDetails = context =>
+                {
+                    var problem = context.ProblemDetails;
 
-            //builder.Services.AddProblemDetails(options =>
-            //{
-            //    options.CustomizeProblemDetails = ctx =>
-            //    {
-            //        ctx.ProblemDetails.Extensions.Add("additionalInfo", "Additional info example");
-            //        ctx.ProblemDetails.Extensions.Add("server", Environment.MachineName);
-            //    };
-            //});
+                    problem.Instance =
+                        $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
+
+                    if (problem is HttpValidationProblemDetails)
+                    {
+                        problem.Type = "Model Validation Problem";
+                        problem.Status = StatusCodes.Status422UnprocessableEntity;
+                        problem.Title = "One or more validation errors occured.";
+                        problem.Detail = "See the errors field for details.";
+                    }
+                };
+            });
             #endregion
 
             services.AddSingleton<FileExtensionContentTypeProvider>();
