@@ -5,6 +5,8 @@ namespace CityInfo.Application.Features.City.Results
 {
     public record GetCitiesResult(
         IReadOnlyList<CityWithoutPointsOfInterestDto> Items,
-        PaginationMetadata PaginationMetaData
+        bool HasPreviousPage,
+        bool HasNextPage,
+        PaginationMetadata PaginationMetadata
     );
 }

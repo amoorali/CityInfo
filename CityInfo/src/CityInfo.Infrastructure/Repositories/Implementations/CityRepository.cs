@@ -1,8 +1,11 @@
 ﻿using CityInfo.Application.Common;
+using CityInfo.Application.Common.Helpers;
+using CityInfo.Application.Common.ResourceParameters;
 using CityInfo.Application.Repositories.Contracts;
 using CityInfo.Domain.Entities;
 using CityInfo.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace CityInfo.Infrastructure.Repositories.Implementations
 {
@@ -23,37 +26,28 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
                 .ToListAsync();
         }
 
-        public async Task<(IEnumerable<City>, PaginationMetadata)> GetCitiesAsync(
-            string? name, string? searchQuery, int pageNumber, int pageSize)
+        public async Task<PagedList<City>> GetCitiesAsync(CitiesResourceParameters citiesResourceParameters)
         {
             // collection to start from
             var collection = Context.Cities.AsQueryable();
 
-            if (!string.IsNullOrEmpty(name))
+            if (!string.IsNullOrEmpty(citiesResourceParameters.Name))
             {
-                name = name.Trim();
-                collection = collection.Where(c => c.Name == name);
+                citiesResourceParameters.Name = citiesResourceParameters.Name.Trim();
+                collection = collection.Where(c => c.Name == citiesResourceParameters.Name);
             }
 
-            if (!string.IsNullOrWhiteSpace(searchQuery))
+            if (!string.IsNullOrWhiteSpace(citiesResourceParameters.SearchQuery))
             {
-                searchQuery = searchQuery.Trim();
-                collection = collection.Where(c => c.Name.Contains(searchQuery)
-                || !string.IsNullOrEmpty(c.Description) && c.Description.Contains(searchQuery));
+                citiesResourceParameters.SearchQuery = citiesResourceParameters.SearchQuery.Trim();
+                collection = collection.Where(c => c.Name.Contains(citiesResourceParameters.SearchQuery)
+                || !string.IsNullOrEmpty(c.Description) && c.Description.Contains(citiesResourceParameters.SearchQuery));
             }
 
-            var totalItemCount = await collection.CountAsync();
-
-            var paginationMetadata = new PaginationMetadata(
-                totalItemCount, pageSize, pageNumber);
-
-            var collectionToReturn = await collection
-                .OrderBy(c => c.Name)
-                .Skip(pageSize * (pageNumber - 1))
-                .Take(pageSize)
-                .ToListAsync();
-
-            return (collectionToReturn, paginationMetadata);
+            return await PagedList<City>.CreateAsync(
+                collection,
+                citiesResourceParameters.PageNumber,
+                citiesResourceParameters.PageSize);
         }
 
         public async Task<City?> GetCityAsync(int cityId, bool includePointsOfInterest)

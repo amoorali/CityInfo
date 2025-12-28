@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using CityInfo.Application.Common.Helpers;
 using CityInfo.Application.Common.ResourceParameters;
 using CityInfo.Application.Features.City.Queries;
 using CityInfo.Domain.Entities;
@@ -27,15 +28,67 @@ namespace CityInfo.APIs.Controllers.V2
         }
         #endregion
 
+        #region [ Private Methods ]
+        private string? CreateCitiesResourceUri(
+            CitiesResourceParameters citiesResourceParameters,
+            ResourceUriType type)
+        {
+            switch (type)
+            {
+                case ResourceUriType.PreviousPage:
+                    return Url.Link("GetCitiesAsync",
+                        new
+                        {
+                            pageNumber = citiesResourceParameters.PageNumber - 1,
+                            pageSize = citiesResourceParameters.PageSize,
+                            name = citiesResourceParameters.Name,
+                            searchQuery = citiesResourceParameters.SearchQuery
+                        });
+                case ResourceUriType.NextPage:
+                    return Url.Link("GetCitiesAsync",
+                        new
+                        {
+                            pageNumber = citiesResourceParameters.PageNumber + 1,
+                            pageSize = citiesResourceParameters.PageSize,
+                            name = citiesResourceParameters.Name,
+                            searchQuery = citiesResourceParameters.SearchQuery
+                        });
+                default:
+                    return Url.Link("GetCitiesAsync",
+                        new
+                        {
+                            pageNumber = citiesResourceParameters.PageNumber + 1,
+                            pageSize = citiesResourceParameters.PageSize,
+                            name = citiesResourceParameters.Name,
+                            searchQuery = citiesResourceParameters.SearchQuery
+                        });
+            }
+        }
+        #endregion
+
         #region [ GET Methods ]
-        [HttpGet]
+        [HttpGet(Name = "GetCitiesAsync")]
+        [HttpHead]
         public async Task<ActionResult<IEnumerable<City>>> GetCitiesAsync(
-            CitiesResourceParameters citiesResourceParameters)
+            [FromQuery] CitiesResourceParameters citiesResourceParameters)
         {
             var result = await _mediator.Send(new GetCitiesQuery(citiesResourceParameters));
 
+            var previousPageLink = result.HasPreviousPage
+                ? CreateCitiesResourceUri(
+                    citiesResourceParameters,
+                    ResourceUriType.PreviousPage) : null;
+
+            var nextPageLink = result.HasNextPage
+                ? CreateCitiesResourceUri(
+                    citiesResourceParameters,
+                    ResourceUriType.NextPage) : null;
+
+            result.PaginationMetadata.PreviousPageLink = previousPageLink;
+            result.PaginationMetadata.NextPageLink = nextPageLink;
+
             Response.Headers.Add("X-Pagination",
-                JsonSerializer.Serialize(result.PaginationMetaData));
+                JsonSerializer.Serialize(result.PaginationMetadata));
 
             return Ok(result.Items);
         }

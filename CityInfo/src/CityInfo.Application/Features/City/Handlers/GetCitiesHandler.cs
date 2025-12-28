@@ -1,4 +1,7 @@
-﻿using CityInfo.Application.DTOs.City;
+﻿using CityInfo.Application.Common;
+using CityInfo.Application.Common.Helpers;
+using CityInfo.Application.Common.ResourceParameters;
+using CityInfo.Application.DTOs.City;
 using CityInfo.Application.Features.BaseImplementations;
 using CityInfo.Application.Features.City.Queries;
 using CityInfo.Application.Features.City.Results;
@@ -20,17 +23,22 @@ namespace CityInfo.Application.Features.City.Handlers
             GetCitiesQuery request,
             CancellationToken cancellationToken)
         {
-            var (entities, paginationMetadata) = await UnitOfWork.Cities
-                .GetCitiesAsync(
-                    request.CitiesResourceParameters.Name,
-                    request.CitiesResourceParameters.SearchQuery,
-                    request.CitiesResourceParameters.PageNumber,
-                    request.CitiesResourceParameters.PageSize
-                );
+            var pagedEntities = await UnitOfWork.Cities
+                .GetCitiesAsync(request.CitiesResourceParameters);
 
-            var dtos = Mapper.Map<IReadOnlyList<CityWithoutPointsOfInterestDto>>(entities);
+            var paginationMetadata = new PaginationMetadata(
+                pagedEntities.TotalCount,
+                pagedEntities.PageSize,
+                pagedEntities.CurrentPage,
+                pagedEntities.TotalPages);
 
-            return new GetCitiesResult(dtos, paginationMetadata);
+            var dtos = Mapper.Map<IReadOnlyList<CityWithoutPointsOfInterestDto>>(pagedEntities.Items);
+
+            return new GetCitiesResult(
+                dtos,
+                pagedEntities.HasPrevious,
+                pagedEntities.HasNext,
+                paginationMetadata);
         }
     }
 }

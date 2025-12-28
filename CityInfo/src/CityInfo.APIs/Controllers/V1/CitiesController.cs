@@ -28,18 +28,6 @@ namespace CityInfo.APIs.Controllers.V1
         #endregion
 
         #region [ GET Methods ]
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<City>>> GetCitiesAsync(
-            CitiesResourceParameters citiesResourceParameters)
-        {
-            var result = await _mediator.Send(new GetCitiesQuery(citiesResourceParameters));
-
-            Response.Headers.Add("X-Pagination",
-                JsonSerializer.Serialize(result.PaginationMetaData));
-
-            return Ok(result.Items);
-        }
-
         /// <summary>
         /// Get a city by id
         /// </summary>
