@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using MediatR;
 using CityInfo.Application.Features.City.Queries;
+using CityInfo.Application.Common.ResourceParameters;
 
 namespace CityInfo.APIs.Controllers.V1
 {
@@ -30,12 +31,13 @@ namespace CityInfo.APIs.Controllers.V1
         #region [ GET Methods ]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<City>>> GetCitiesAsync(
-            string? name, string? searchQuery, int pageNumber = 1, int pageSize = 10)
+            CitiesResourceParameters citiesResourceParameters, int pageNumber = 1, int pageSize = 10)
         {
             if (pageSize > maxCitiesPageSize)
                 pageSize = maxCitiesPageSize;
 
-            var result = await _mediator.Send(new GetCitiesQuery(name, searchQuery, pageNumber, pageSize));
+            var result = await _mediator.Send(
+                new GetCitiesQuery(citiesResourceParameters.Name, pageNumber, pageSize));
 
             Response.Headers.Add("X-Pagination",
                 JsonSerializer.Serialize(result.PaginationMetaData));

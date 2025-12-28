@@ -21,7 +21,8 @@ namespace CityInfo.Application.Features.City.Handlers
             CancellationToken cancellationToken)
         {
             var (entities, paginationMetadata) = await UnitOfWork.Cities
-                .GetCitiesAsync(request.Name, request.SearchQuery, request.PageNumber, request.PageSize);
+                .GetCitiesAsync(request.CitiesResourceParameters.Name, request.CitiesResourceParameters.SearchQuery,
+                    request.PageNumber, request.PageSize);
 
             var dtos = Mapper.Map<IReadOnlyList<CityWithoutPointsOfInterestDto>>(entities);
 

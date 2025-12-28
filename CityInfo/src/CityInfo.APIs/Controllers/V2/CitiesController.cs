@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using CityInfo.Application.Common.ResourceParameters;
 using CityInfo.Application.Features.City.Queries;
 using CityInfo.Domain.Entities;
 using MediatR;
@@ -30,12 +31,12 @@ namespace CityInfo.APIs.Controllers.V2
         #region [ GET Methods ]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<City>>> GetCitiesAsync(
-            string? name, string? searchQuery, int pageNumber = 1, int pageSize = 10)
+            CitiesResourceParameters citiesResourceParameters, int pageNumber = 1, int pageSize = 10)
         {
             if (pageSize > maxCitiesPageSize)
                 pageSize = maxCitiesPageSize;
 
-            var result = await _mediator.Send(new GetCitiesQuery(name, searchQuery, pageNumber, pageSize));
+            var result = await _mediator.Send(new GetCitiesQuery(citiesResourceParameters, pageNumber, pageSize));
 
             Response.Headers.Add("X-Pagination",
                 JsonSerializer.Serialize(result.PaginationMetaData));
