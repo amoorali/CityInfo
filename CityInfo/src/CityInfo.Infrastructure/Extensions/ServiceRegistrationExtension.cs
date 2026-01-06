@@ -37,6 +37,10 @@ namespace CityInfo.Infrastructure.Extensions
             services.AddTransient<IMailService, CloudMailService>();
 #endif
             #endregion
+
+            #region [ Other Services ]
+            services.AddTransient<IPropertyCheckerService, PropertyCheckerService>();
+            #endregion
         }
     }
 }
