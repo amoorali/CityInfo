@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using CityInfo.Application.Behaviors;
+using CityInfo.Application.Common.Exceptions;
 using CityInfo.Application.Validation.PointOfInterest;
 using CityInfo.Infrastructure.Extensions;
 using FluentValidation;
@@ -116,7 +117,8 @@ namespace CityInfo.APIs.Extensions
                     problem.Instance =
                         $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
 
-                    if (problem is HttpValidationProblemDetails)
+                    if (problem is HttpValidationProblemDetails ||
+                        context.Exception is ValidationException)
                     {
                         ProblemDetailsHelpers.ApplyValidationDefaults(
                             context.HttpContext,
@@ -125,18 +127,28 @@ namespace CityInfo.APIs.Extensions
 
                     if (context.Exception is ValidationException validationException)
                     {
-                        ProblemDetailsHelpers.ApplyValidationDefaults(
-                            context.HttpContext,
-                            problem);
-
-                        var errors = validationException.Errors
+                        problem.Extensions["errors"] = validationException.Errors
                             .GroupBy(e => e.PropertyName)
                             .ToDictionary(
                                 g => g.Key,
                                 g => g.Select(e => e.ErrorMessage).ToArray()
                             );
+                    }
 
-                        problem.Extensions["errors"] = errors;
+                    if (context.Exception is NotFoundException notFound)
+                    {
+                        context.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                        problem.Status = StatusCodes.Status404NotFound;
+                        problem.Title = "Not Found";
+                        problem.Detail = notFound.Message;
+                    }
+
+                    if (context.Exception is BadRequestException badRequest)
+                    {
+                        context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+                        problem.Status = StatusCodes.Status400BadRequest;
+                        problem.Title = "Bad Request";
+                        problem.Detail = badRequest.Message;
                     }
                 };
             });
