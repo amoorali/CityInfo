@@ -14,7 +14,10 @@ namespace CityInfo.Application.Features.City.Handlers
         IRequestHandler<GetCitiesQuery, GetCitiesResult>
     {
         #region [ Constructor ]
-        public GetCitiesHandler(IUnitOfWork unitOfWork, IMapper mapper, IMailService mailService,
+        public GetCitiesHandler(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IMailService mailService,
             IPropertyCheckerService propertyCheckerService)
             : base(unitOfWork, mapper, mailService, propertyCheckerService)
         {
