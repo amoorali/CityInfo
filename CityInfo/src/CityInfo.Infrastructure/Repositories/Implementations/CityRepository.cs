@@ -52,10 +52,5 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
         #endregion
 
         #endregion
-
-        public CityInfoContext CityInfoContext
-        {
-            get { return Context as CityInfoContext; }
-        }
     }
 }

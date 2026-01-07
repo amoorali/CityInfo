@@ -1,7 +1,7 @@
 ﻿using CityInfo.Application.DTOs.PointOfInterest;
-using CityInfo.Application.Features.BaseImplementations;
 using CityInfo.Application.Features.PointOfInterest.Commands;
 using CityInfo.Application.Features.PointOfInterest.Results;
+using CityInfo.Application.Repositories.Contracts;
 using CityInfo.Application.Services.Contracts;
 using FluentValidation;
 using Mapster;
@@ -9,21 +9,25 @@ using MediatR;
 
 namespace CityInfo.Application.Features.PointOfInterest.Handlers
 {
-    public class PatchPointOfInterestHandler : GeneralHandler,
-        IRequestHandler<PatchPointOfInterestCommand, PatchPointOfInterestResult>
+    public class PatchPointOfInterestHandler : IRequestHandler<PatchPointOfInterestCommand, PatchPointOfInterestResult>
     {
         #region [ Fields ]
+        private readonly ICityRepository _cityRepository;
+        private readonly IPointOfInterestRepository _pointOfInterestRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<PointOfInterestForUpdateDto> _validator;
         #endregion
 
         #region [ Constructor ]
         public PatchPointOfInterestHandler(
+            ICityRepository cityRepository,
+            IPointOfInterestRepository pointOfInterestRepository,
             IUnitOfWork unitOfWork,
-            IMailService mailService,
-            IPropertyCheckerService propertyCheckerService,
             IValidator<PointOfInterestForUpdateDto> validator)
-            : base(unitOfWork, mailService, propertyCheckerService)
         {
+            _cityRepository = cityRepository;
+            _pointOfInterestRepository = pointOfInterestRepository;
+            _unitOfWork = unitOfWork;
             _validator = validator;
         }
         #endregion
@@ -33,10 +37,10 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
             PatchPointOfInterestCommand request,
             CancellationToken cancellationToken)
         {
-            if (!await UnitOfWork.Cities.CityExistsAsync(request.CityId))
+            if (!await _cityRepository.CityExistsAsync(request.CityId))
                 return new PatchPointOfInterestResult(true, true, null, null);
 
-            var entity = await UnitOfWork.PointsOfInterest
+            var entity = await _pointOfInterestRepository
                 .GetPointOfInterestForCityAsync(request.CityId, request.PointOfInterestId);
 
             if (entity == null)
@@ -71,7 +75,7 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
             
             dtoToPatch.Adapt(entity);
 
-            await UnitOfWork.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return new PatchPointOfInterestResult(false, false, dtoToPatch, null);
         }

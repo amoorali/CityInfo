@@ -1,23 +1,26 @@
 ﻿using CityInfo.Application.DTOs.PointOfInterest;
-using CityInfo.Application.Features.BaseImplementations;
 using CityInfo.Application.Features.PointOfInterest.Queries;
 using CityInfo.Application.Features.PointOfInterest.Results;
-using CityInfo.Application.Services.Contracts;
+using CityInfo.Application.Repositories.Contracts;
 using Mapster;
 using MediatR;
 
 namespace CityInfo.Application.Features.PointOfInterest.Handlers
 {
-    public class GetPointOfInterestHandler : GeneralHandler,
-        IRequestHandler<GetPointOfInterestQuery, GetPointOfInterestResult>
+    public class GetPointOfInterestHandler : IRequestHandler<GetPointOfInterestQuery, GetPointOfInterestResult>
     {
+        #region [ Fields ]
+        private readonly ICityRepository _cityRepository;
+        private readonly IPointOfInterestRepository _pointOfInterestRepository;
+        #endregion
+
         #region [ Constructor ]
         public GetPointOfInterestHandler(
-            IUnitOfWork unitOfWork,
-            IMailService mailService,
-            IPropertyCheckerService propertyCheckerService)
-            : base(unitOfWork, mailService, propertyCheckerService)
+            ICityRepository cityRepository,
+            IPointOfInterestRepository pointOfInterestRepository)
         {
+            _cityRepository = cityRepository;
+            _pointOfInterestRepository = pointOfInterestRepository;
         }
         #endregion
 
@@ -26,10 +29,10 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
             GetPointOfInterestQuery request,
             CancellationToken cancellationToken)
         {
-            if (!await UnitOfWork.Cities.CityExistsAsync(request.CityId))
+            if (!await _cityRepository.CityExistsAsync(request.CityId))
                 return new GetPointOfInterestResult(true, true, null);
 
-            var pointOfInterest = await UnitOfWork.PointsOfInterest
+            var pointOfInterest = await _pointOfInterestRepository
                 .GetPointOfInterestForCityAsync(request.CityId, request.PointOfInterestId);
 
             if (pointOfInterest == null)

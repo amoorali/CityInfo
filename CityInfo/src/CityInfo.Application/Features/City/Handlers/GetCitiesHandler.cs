@@ -2,26 +2,32 @@
 using CityInfo.Application.Common.Exceptions;
 using CityInfo.Application.Common.Helpers;
 using CityInfo.Application.DTOs.City;
-using CityInfo.Application.Features.BaseImplementations;
 using CityInfo.Application.Features.City.Queries;
 using CityInfo.Application.Features.City.Results;
+using CityInfo.Application.Repositories.Contracts;
 using CityInfo.Application.Services.Contracts;
 using Mapster;
 using MediatR;
 
 namespace CityInfo.Application.Features.City.Handlers
 {
-    public class GetCitiesHandler : GeneralHandler,
-        IRequestHandler<GetCitiesQuery, GetCitiesResult>
+    public class GetCitiesHandler : IRequestHandler<GetCitiesQuery, GetCitiesResult>
     {
+        #region [ Fields ]
+        private readonly ICityRepository _cityRepository;
+        private readonly IPropertyCheckerService _propertyCheckerService;
+        private readonly IPropertyMappingService _propertyMappingService;
+        #endregion
+
         #region [ Constructor ]
         public GetCitiesHandler(
-            IUnitOfWork unitOfWork,
-            IMailService mailService,
+            ICityRepository cityRepository,
             IPropertyCheckerService propertyCheckerService,
             IPropertyMappingService propertyMappingService)
-            : base(unitOfWork, mailService, propertyCheckerService, propertyMappingService)
         {
+            _cityRepository = cityRepository;
+            _propertyCheckerService = propertyCheckerService;
+            _propertyMappingService = propertyMappingService;
         }
         #endregion
 
@@ -32,19 +38,19 @@ namespace CityInfo.Application.Features.City.Handlers
         {
             var parameters = request.CitiesResourceParameters;
 
-            if (!PropertyMappingService.
+            if (!_propertyMappingService.
                 ValidMappingExistsFor<CityDto, Domain.Entities.City>(parameters.OrderBy))
             {
                 throw new BadRequestException("Invalid sorting fields.");
             }
 
-            if (!PropertyCheckerService.TypeHasProperties<CityWithoutPointsOfInterestDto>
+            if (!_propertyCheckerService.TypeHasProperties<CityWithoutPointsOfInterestDto>
                 (parameters.Fields))
             {
                 throw new BadRequestException("No cities found");
             }
 
-            var query = UnitOfWork.Cities.QueryCities();
+            var query = _cityRepository.QueryCities();
 
             #region [ Filter ]
             var name = parameters.Name?.Trim();

@@ -1,7 +1,5 @@
-﻿using CityInfo.Application.Repositories.Contracts;
-using CityInfo.Application.Services.Contracts;
+﻿using CityInfo.Application.Services.Contracts;
 using CityInfo.Infrastructure.DbContexts;
-using CityInfo.Infrastructure.Repositories.Implementations;
 
 namespace CityInfo.Infrastructure.Services.Implementations
 {
@@ -9,8 +7,6 @@ namespace CityInfo.Infrastructure.Services.Implementations
     {
         #region [ Fields ]
         private readonly CityInfoContext _context;
-        public ICityRepository Cities { get; private set; }
-        public IPointOfInterestRepository PointsOfInterest { get; private set; }
         #endregion
 
         #region [ Constructor ]
@@ -18,8 +14,6 @@ namespace CityInfo.Infrastructure.Services.Implementations
         {
             _context = context ?? 
                 throw new ArgumentNullException(nameof(context));
-            Cities = new CityRepository(_context);
-            PointsOfInterest = new PointOfInterestRepository(_context);
         }
         #endregion
 

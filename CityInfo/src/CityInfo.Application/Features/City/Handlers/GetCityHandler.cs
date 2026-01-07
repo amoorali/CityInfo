@@ -1,25 +1,28 @@
 ﻿using CityInfo.Application.Common.Helpers;
 using CityInfo.Application.DTOs.City;
-using CityInfo.Application.Features.BaseImplementations;
 using CityInfo.Application.Features.City.Queries;
 using CityInfo.Application.Features.City.Results;
+using CityInfo.Application.Repositories.Contracts;
 using CityInfo.Application.Services.Contracts;
 using Mapster;
 using MediatR;
 
 namespace CityInfo.Application.Features.City.Handlers
 {
-    public class GetCityHandler : GeneralHandler,
-        IRequestHandler<GetCityQuery, GetCityResult>
+    public class GetCityHandler : IRequestHandler<GetCityQuery, GetCityResult>
     {
+        #region [ Fields ]
+        private readonly ICityRepository _cityRepository;
+        private readonly IPropertyCheckerService _propertyCheckerService;
+        #endregion
+
         #region [ Constructor ]
         public GetCityHandler(
-            IUnitOfWork unitOfWork,
-            IMailService mailService,
-            IPropertyCheckerService propertyCheckerService,
-            IPropertyMappingService propertyMappingService)
-            : base(unitOfWork, mailService, propertyCheckerService, propertyMappingService)
+            ICityRepository cityRepository,
+            IPropertyCheckerService propertyCheckerService)
         {
+            _cityRepository = cityRepository;
+            _propertyCheckerService = propertyCheckerService;
         }
         #endregion
 
@@ -28,19 +31,19 @@ namespace CityInfo.Application.Features.City.Handlers
             GetCityQuery request,
             CancellationToken cancellationToken)
         {
-            if (!PropertyCheckerService.TypeHasProperties<CityDto>(request.Fields))
+            if (!_propertyCheckerService.TypeHasProperties<CityDto>(request.Fields))
                 return new GetCityResult(true, null);
 
             Domain.Entities.City? entity;
 
             if (request.IncludePointsOfInterest)
             {
-                entity = await UnitOfWork.Cities.
+                entity = await _cityRepository.
                     GetCityWithPointsOfInterestAsync(request.CityId);
             }
             else
             {
-                entity = await UnitOfWork.Cities
+                entity = await _cityRepository
                     .GetCityWithoutPointsOfInterestAsync(request.CityId);
             }
 
