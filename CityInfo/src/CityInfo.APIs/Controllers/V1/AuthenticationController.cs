@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace CityInfo.APIs.Controllers
+namespace CityInfo.APIs.Controllers.V1
 {
     [ApiController]
+    [ApiVersion(1)]
     [Route("api/authentication")]
     public class AuthenticationController : ControllerBase
     {

@@ -11,7 +11,7 @@ namespace CityInfo.APIs.Controllers.V1
 {
     [ApiController]
     [Authorize]
-    [ApiVersion(1, Deprecated = true)]
+    [ApiVersion(1)]
     [Route("api/v{version:apiVersion}/cities")]
     public class CitiesController : ControllerBase
     {
