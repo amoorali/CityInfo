@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using CityInfo.Application.Common.Helpers;
 using CityInfo.Application.Common.ResourceParameters;
+using CityInfo.Application.DTOs.Link;
 using CityInfo.Application.Features.City.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -69,6 +70,38 @@ namespace CityInfo.APIs.Controllers.V1
                         });
             }
         }
+
+        private IEnumerable<LinkDto> CreateLinksForCity(int cityId, string? fields)
+        {
+            var links = new List<LinkDto>();
+
+            if (string.IsNullOrWhiteSpace(fields))
+            {
+                links.Add(
+                    new(Url.Link("GetCityAsync", new { cityId }),
+                    "self",
+                    "GET"));
+            }
+            else
+            {
+                links.Add(
+                    new(Url.Link("GetCityAsync", new { cityId, fields }),
+                    "self",
+                    "GET"));
+            }
+
+            links.Add(
+                new(Url.Link("CreatePointOfInterestAsync", new { cityId }),
+                "create_pointofinterest_for_city",
+                "POST"));
+
+            links.Add(
+                new(Url.Link("GetPointsOfInterestAsync", new { cityId }),
+                "pointsofinterest",
+                "GET"));
+
+            return links;
+        }
         #endregion
 
         #region [ GET Methods ]
@@ -108,7 +141,7 @@ namespace CityInfo.APIs.Controllers.V1
         /// <response code="200">Returns the requested city</response>
         /// <response code="404"></response>
         /// <response code="400"></response>
-        [HttpGet("{cityId}")]
+        [HttpGet("{cityId}", Name = "GetCityAsync")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]

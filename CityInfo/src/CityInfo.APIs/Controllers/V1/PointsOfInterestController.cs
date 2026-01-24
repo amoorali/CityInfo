@@ -32,7 +32,7 @@ namespace CityInfo.APIs.Controllers.V1
         #endregion
 
         #region [ GET Methods ]
-        [HttpGet]
+        [HttpGet(Name = "GetPointsOfInterestAsync")]
         public async Task<ActionResult<IEnumerable<PointOfInterestDto>>> GetPointsOfInterestAsync(int cityId)
         {
             var cityName = User.Claims.First(c => c.Type == "city").Value;
@@ -46,7 +46,7 @@ namespace CityInfo.APIs.Controllers.V1
             
         }
 
-        [HttpGet("{pointOfInterestId}", Name = "GetPointOfInterest")]
+        [HttpGet("{pointOfInterestId}", Name = "GetPointOfInterestAsync")]
         public async Task<ActionResult<PointOfInterestDto>> GetPointOfInterestAsync(int cityId, int pointOfInterestId)
         {
             var result = await _mediator.Send(new GetPointOfInterestQuery(cityId, pointOfInterestId));
@@ -59,14 +59,14 @@ namespace CityInfo.APIs.Controllers.V1
         #endregion
 
         #region [ POST Methods ]
-        [HttpPost]
-        public async Task<ActionResult<PointOfInterestDto>> CreatePointOfInterest(
+        [HttpPost(Name = "CreatePointOfInterestAsync")]
+        public async Task<ActionResult<PointOfInterestDto>> CreatePointOfInterestAsync(
             int cityId,
             PointOfInterestForCreationDto pointOfInterest)
         {
             var result = await _mediator.Send(new CreatePointOfInterestCommand(cityId, pointOfInterest));
 
-            return CreatedAtRoute("GetPointOfInterest",
+            return CreatedAtRoute("GetPointOfInterestAsync",
                 new
                 {
                     cityId,
@@ -77,8 +77,8 @@ namespace CityInfo.APIs.Controllers.V1
         #endregion
 
         #region [ PUT Methods ]
-        [HttpPut("{pointOfInterestId}")]
-        public async Task<ActionResult> UpdatePointOfInterest(int cityId, int pointOfInterestId,
+        [HttpPut("{pointOfInterestId}", Name = "UpdatePointOfInterestAsync")]
+        public async Task<ActionResult> UpdatePointOfInterestAsync(int cityId, int pointOfInterestId,
             PointOfInterestForUpdateDto pointOfInterest)
         {
             var result = await _mediator.Send(new UpdatePointOfInterestCommand(cityId, pointOfInterestId, pointOfInterest));
@@ -91,8 +91,8 @@ namespace CityInfo.APIs.Controllers.V1
         #endregion
 
         #region [ PATCH Methods ]
-        [HttpPatch("{pointOfInterestId}")]
-        public async Task<ActionResult> PartiallyUpdatePointOfInterest(int cityId, int pointOfInterestId,
+        [HttpPatch("{pointOfInterestId}", Name = "PartiallyUpdatePointOfInterestAsync")]
+        public async Task<ActionResult> PartiallyUpdatePointOfInterestAsync(int cityId, int pointOfInterestId,
             JsonPatchDocument<PointOfInterestForUpdateDto> patchDocument)
         {
             var result = await _mediator.Send(new PatchPointOfInterestCommand(cityId, pointOfInterestId, patchDocument));
@@ -114,7 +114,7 @@ namespace CityInfo.APIs.Controllers.V1
         #endregion
 
         #region [ DELETE Methods ]
-        [HttpDelete("{pointOfInterestId}")]
+        [HttpDelete("{pointOfInterestId}", Name = "DeletePointOfInterestAsync")]
         public async Task<ActionResult> DeletePointOfInterestAsync(int cityId, int pointOfInterestId)
         {
             var result = await _mediator.Send(new DeletePointOfInterestCommand(cityId, pointOfInterestId));
