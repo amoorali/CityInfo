@@ -4,13 +4,14 @@
         <name>CityInfo.APIs</name>
     </assembly>
     <members>
-        <member name="M:CityInfo.APIs.Controllers.V1.CitiesController.GetCityAsync(System.Int32,System.Boolean,CityInfo.Application.Common.ResourceParameters.CitiesResourceParameters)">
+        <member name="M:CityInfo.APIs.Controllers.V1.CitiesController.GetCityAsync(System.Int32,System.Boolean,CityInfo.Application.Common.ResourceParameters.CitiesResourceParameters,System.String)">
              <summary>
              Get a city by id
              </summary>
             <param name="cityId">The id of the city to get</param>
              <param name="includePointsOfInterest">Whether or not to include the points of interest</param>
              <param name="citiesResourceParameters">The resource parameters for city to query</param>
+             <param name="mediaType">The type of output media</param>
              <returns>A city with or without points of interest</returns>
              <response code="200">Returns the requested city</response>
              <response code="404"></response>

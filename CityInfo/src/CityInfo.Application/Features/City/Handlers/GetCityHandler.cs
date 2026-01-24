@@ -1,4 +1,5 @@
-﻿using CityInfo.Application.Common.Helpers;
+﻿using CityInfo.Application.Common.Exceptions;
+using CityInfo.Application.Common.Helpers;
 using CityInfo.Application.DTOs.City;
 using CityInfo.Application.Features.City.Queries;
 using CityInfo.Application.Features.City.Results;
@@ -6,6 +7,7 @@ using CityInfo.Application.Repositories.Contracts;
 using CityInfo.Application.Services.Contracts;
 using Mapster;
 using MediatR;
+using System.Net.Http.Headers;
 
 namespace CityInfo.Application.Features.City.Handlers
 {
@@ -32,7 +34,12 @@ namespace CityInfo.Application.Features.City.Handlers
             CancellationToken cancellationToken)
         {
             if (!_propertyCheckerService.TypeHasProperties<CityDto>(request.Fields))
-                return new GetCityResult(true, null);
+                return new GetCityResult(true, null, null);
+
+            if (!MediaTypeHeaderValue.TryParse(request.MediaType, out var parsedMediaType))
+            {
+                throw new BadRequestException("Accept header media type value is not a valid media type.");
+            }
 
             Domain.Entities.City? entity;
 
@@ -48,26 +55,34 @@ namespace CityInfo.Application.Features.City.Handlers
             }
 
             if (entity == null)
-                return new GetCityResult(true, null);
+                return new GetCityResult(true, null, null);
 
-            IDictionary<string, object?> linkedResources;
-
-            if (request.IncludePointsOfInterest)
+            if (parsedMediaType.MediaType == "application/vnd.marvin.hateoas+json")
             {
-                linkedResources = entity
-                    .Adapt<CityDto>()
-                    .ShapeData(request.Fields);
-            }
-            else
-            {
-                linkedResources = entity
-                    .Adapt<CityWithoutPointsOfInterestDto>()
-                    .ShapeData(request.Fields);
+
+                IDictionary<string, object?> linkedResources;
+
+                if (request.IncludePointsOfInterest)
+                {
+                    linkedResources = entity
+                        .Adapt<CityDto>()
+                        .ShapeData(request.Fields);
+                }
+                else
+                {
+                    linkedResources = entity
+                        .Adapt<CityWithoutPointsOfInterestDto>()
+                        .ShapeData(request.Fields);
+                }
+
+                linkedResources.Add("links", request.Links);
+
+                return new GetCityResult(false, null, linkedResources);
             }
 
-            linkedResources.Add("links", request.Links);
+            var dto = entity.Adapt<CityDto>();
 
-            return new GetCityResult(false, linkedResources);
+            return new GetCityResult(false, dto, null);
         }
         #endregion
     }

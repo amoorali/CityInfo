@@ -144,7 +144,7 @@ namespace CityInfo.APIs.Controllers.V1
             result.PaginationMetadata.PreviousPageLink = previousPageLink;
             result.PaginationMetadata.NextPageLink = nextPageLink;
 
-            Response.Headers.Add("X-Pagination",
+            Response.Headers.Append("X-Pagination",
                 JsonSerializer.Serialize(result.PaginationMetadata));
 
             return Ok(result.Items);
@@ -156,6 +156,7 @@ namespace CityInfo.APIs.Controllers.V1
         ///<param name="cityId">The id of the city to get</param>
         /// <param name="includePointsOfInterest">Whether or not to include the points of interest</param>
         /// <param name="citiesResourceParameters">The resource parameters for city to query</param>
+        /// <param name="mediaType">The type of output media</param>
         /// <returns>A city with or without points of interest</returns>
         /// <response code="200">Returns the requested city</response>
         /// <response code="404"></response>
@@ -167,7 +168,8 @@ namespace CityInfo.APIs.Controllers.V1
         public async Task<IActionResult> GetCityAsync(
             int cityId,
             bool includePointsOfInterest,
-            [FromQuery] CitiesResourceParameters citiesResourceParameters)
+            [FromQuery] CitiesResourceParameters citiesResourceParameters,
+            [FromHeader(Name = "Accept")] string? mediaType)
         {
 
             var links = CreateLinksForCity(cityId, citiesResourceParameters.Fields);
@@ -176,7 +178,8 @@ namespace CityInfo.APIs.Controllers.V1
                 cityId,
                 includePointsOfInterest,
                 citiesResourceParameters.Fields,
-                links));
+                links,
+                mediaType));
 
             if (result.NotFound)
                 return NotFound("The id isn't in the collection");

@@ -9,7 +9,8 @@ namespace CityInfo.Application.Features.City.Queries
         int CityId,
         bool IncludePointsOfInterest,
         string? Fields,
-        IEnumerable<LinkDto> Links
+        IEnumerable<LinkDto> Links,
+        string? MediaType
     ) : IRequest<GetCityResult>;
     #endregion
 }
