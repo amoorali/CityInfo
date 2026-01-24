@@ -18,6 +18,7 @@ namespace CityInfo.APIs
             }).AddNewtonsoftJson()
             .AddXmlDataContractSerializerFormatters();
 
+            builder.Services.ConfigureOutputFormatters();
             builder.Services.ConfigureApplicationLayer();
             builder.Services.ConfigureInfrastructureLayer(builder.Configuration);
             builder.Services.ConfigureServices();

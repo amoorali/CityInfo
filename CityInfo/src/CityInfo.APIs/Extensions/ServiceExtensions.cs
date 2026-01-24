@@ -7,6 +7,8 @@ using CityInfo.Infrastructure.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
@@ -15,6 +17,20 @@ namespace CityInfo.APIs.Extensions
 {
     public static class ServiceExtensions
     {
+        #region [ Output Formatters ]
+        public static void ConfigureOutputFormatters(this IServiceCollection services)
+        {
+            services.Configure<MvcOptions>(config =>
+            {
+                var newtonsoftJsonOutputFormatter = config.OutputFormatters
+                    .OfType<NewtonsoftJsonOutputFormatter>()?.FirstOrDefault();
+
+                newtonsoftJsonOutputFormatter?.SupportedMediaTypes
+                    .Add("application/vnd.marvin.hateoas+json");
+            });
+        }
+        #endregion
+
         #region [ API Versioning ]
         public static void ConfigureApiVersioning(this IServiceCollection services)
         {
