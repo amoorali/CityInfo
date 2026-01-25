@@ -1,12 +1,11 @@
-﻿using CityInfo.Application.DTOs.City;
+﻿using System.Dynamic;
 
 namespace CityInfo.Application.Features.City.Results
 {
     #region [ Result Record ]
     public record GetCityResult(
         bool NotFound,
-        CityDto? Dto,
-        IDictionary<string, object?>? LinkedResources
+        Object? Item
     );
     #endregion
 }

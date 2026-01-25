@@ -7,7 +7,9 @@ using CityInfo.Application.Repositories.Contracts;
 using CityInfo.Application.Services.Contracts;
 using Mapster;
 using MediatR;
+using System.Dynamic;
 using System.Net.Http.Headers;
+using System.Net.Mail;
 
 namespace CityInfo.Application.Features.City.Handlers
 {
@@ -34,55 +36,34 @@ namespace CityInfo.Application.Features.City.Handlers
             CancellationToken cancellationToken)
         {
             if (!_propertyCheckerService.TypeHasProperties<CityDto>(request.Fields))
-                return new GetCityResult(true, null, null);
+                throw new BadRequestException("One or more requested fields do not exist.");
 
             if (!MediaTypeHeaderValue.TryParse(request.MediaType, out var parsedMediaType))
-            {
                 throw new BadRequestException("Accept header media type value is not a valid media type.");
-            }
 
-            Domain.Entities.City? entity;
-
-            if (request.IncludePointsOfInterest)
-            {
-                entity = await _cityRepository.
-                    GetCityWithPointsOfInterestAsync(request.CityId);
-            }
-            else
-            {
-                entity = await _cityRepository
-                    .GetCityWithoutPointsOfInterestAsync(request.CityId);
-            }
+            Domain.Entities.City? entity = request.IncludePointsOfInterest
+                ? await _cityRepository.GetCityWithPointsOfInterestAsync(request.CityId)
+                : await _cityRepository.GetCityWithoutPointsOfInterestAsync(request.CityId);
 
             if (entity == null)
-                return new GetCityResult(true, null, null);
+                return new GetCityResult(NotFound: true, Item: null);
 
-            if (parsedMediaType.MediaType == "application/vnd.marvin.hateoas+json")
+            ExpandoObject shapedDto = request.IncludePointsOfInterest
+                ? entity.Adapt<CityDto>().ShapeData(request.Fields)
+                : entity.Adapt<CityWithoutPointsOfInterestDto>().ShapeData(request.Fields);
+
+            if (parsedMediaType.MediaType.Equals("application/vnd.marvin.hateoas+json",
+                StringComparison.OrdinalIgnoreCase))
             {
 
-                IDictionary<string, object?> linkedResources;
-
-                if (request.IncludePointsOfInterest)
-                {
-                    linkedResources = entity
-                        .Adapt<CityDto>()
-                        .ShapeData(request.Fields);
-                }
-                else
-                {
-                    linkedResources = entity
-                        .Adapt<CityWithoutPointsOfInterestDto>()
-                        .ShapeData(request.Fields);
-                }
+                var linkedResources = (IDictionary<string, object?>)shapedDto;
 
                 linkedResources.Add("links", request.Links);
 
-                return new GetCityResult(false, null, linkedResources);
+                return new GetCityResult(NotFound: false, Item: linkedResources);
             }
 
-            var dto = entity.Adapt<CityDto>();
-
-            return new GetCityResult(false, dto, null);
+            return new GetCityResult(NotFound: false, Item: shapedDto);
         }
         #endregion
     }
