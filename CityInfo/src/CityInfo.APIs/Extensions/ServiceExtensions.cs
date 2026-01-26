@@ -135,6 +135,14 @@ namespace CityInfo.APIs.Extensions
         }
         #endregion
 
+        #region [ Response Caching ]
+        public static void ConfigureResponseCaching(this IServiceCollection services)
+        {
+            services.AddResponseCaching();
+            services.AddMemoryCache();
+        }
+        #endregion
+
         #region [ Other Services ]
         public static void ConfigureServices(this IServiceCollection services)
         {

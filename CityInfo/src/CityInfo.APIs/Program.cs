@@ -26,6 +26,7 @@ namespace CityInfo.APIs
             builder.Services.ConfigureVersionedSwagger();
             builder.Services.ConfigureAuthentication(builder.Configuration);
             builder.Services.ConfigureAuthorization();
+            builder.Services.ConfigureResponseCaching();
 
             var app = builder.Build();
 
@@ -40,6 +41,8 @@ namespace CityInfo.APIs
             app.UseAuthorization();
 
             app.ExceptionHandlerConfiguration();
+
+            app.UseResponseCaching();
 
             app.MapControllers();
 
