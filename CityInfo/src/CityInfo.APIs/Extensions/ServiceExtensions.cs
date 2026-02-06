@@ -145,7 +145,17 @@ namespace CityInfo.APIs.Extensions
         #region [ Cache Headers ]
         public static void ConfigureCacheHeaders(this IServiceCollection services)
         {
-            services.AddHttpCacheHeaders();
+            services.AddHttpCacheHeaders(
+                (expirationModelOptions) =>
+                {
+                    expirationModelOptions.MaxAge = 60;
+                    expirationModelOptions.CacheLocation =
+                        Marvin.Cache.Headers.CacheLocation.Private;
+                },
+                (validationModelOptions) =>
+                {
+                    validationModelOptions.MustRevalidate = true;
+                });
         }
         #endregion
 
