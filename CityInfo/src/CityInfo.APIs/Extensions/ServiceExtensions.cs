@@ -143,6 +143,13 @@ namespace CityInfo.APIs.Extensions
         }
         #endregion
 
+        #region [ Cache Headers ]
+        public static void ConfigureCacheHeaders(this IServiceCollection services)
+        {
+            services.AddHttpCacheHeaders();
+        }
+        #endregion
+
         #region [ Other Services ]
         public static void ConfigureServices(this IServiceCollection services)
         {

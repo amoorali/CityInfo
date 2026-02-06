@@ -27,6 +27,7 @@ namespace CityInfo.APIs
             builder.Services.ConfigureAuthentication(builder.Configuration);
             builder.Services.ConfigureAuthorization();
             builder.Services.ConfigureResponseCaching();
+            builder.Services.ConfigureCacheHeaders();
 
             var app = builder.Build();
 
@@ -36,13 +37,15 @@ namespace CityInfo.APIs
 
             app.UseRouting();
 
+            app.UseResponseCaching();
+
+            app.UseHttpCacheHeaders();
+
             app.UseAuthentication();
 
             app.UseAuthorization();
 
             app.ExceptionHandlerConfiguration();
-
-            app.UseResponseCaching();
 
             app.MapControllers();
 

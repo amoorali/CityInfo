@@ -30,19 +30,6 @@ namespace CityInfo.APIs.Controllers.V1
         #endregion
 
         #region [ GET Methods ]
-        [ResponseCache(
-            Duration = 60,
-            Location = ResponseCacheLocation.Any,
-            NoStore = false,
-            VaryByHeader = "Accept",
-            VaryByQueryKeys = new[]
-            {
-                "pageNumber",
-                "pageSize",
-                "searchQuery",
-                "orderBy"
-            }
-        )]
         [HttpGet(Name = "GetCitiesAsync")]
         [HttpHead]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
