@@ -3,7 +3,6 @@ using Asp.Versioning.ApiExplorer;
 using CityInfo.Application.Behaviors;
 using CityInfo.Application.Common.Exceptions;
 using CityInfo.Application.Validation.PointOfInterest;
-using CityInfo.Infrastructure.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;

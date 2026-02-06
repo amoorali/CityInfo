@@ -3,7 +3,6 @@ using CityInfo.Application.Common.ResourceParameters;
 using CityInfo.Application.DTOs.City;
 using CityInfo.Application.Features.City.Commands;
 using CityInfo.Application.Features.City.Queries;
-using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
