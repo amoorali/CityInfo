@@ -1,9 +1,11 @@
 ﻿using CityInfo.Domain.Entities;
+using CityInfo.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CityInfo.Infrastructure.DbContexts
 {
-    public class CityInfoContext : DbContext
+    public class CityInfoContext : IdentityDbContext<ApplicationUser>
     {
         #region [ Fields ]
         public DbSet<City> Cities { get; set; }
