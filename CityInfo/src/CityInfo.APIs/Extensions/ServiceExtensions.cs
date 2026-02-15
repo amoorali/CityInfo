@@ -9,7 +9,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 
 namespace CityInfo.APIs.Extensions
@@ -87,20 +86,7 @@ namespace CityInfo.APIs.Extensions
         #region [ Authentication ]
         public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddAuthentication("Bearer")
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new()
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = configuration["Authentication:Issuer"],
-                        ValidAudience = configuration["Authentication:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Convert.FromBase64String(configuration["Authentication:SecretForKey"]))
-                    };
-                });
+            services.AuthenticateJwtBearer(configuration);
         }
         #endregion
 
