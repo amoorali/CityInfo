@@ -37,9 +37,9 @@ namespace CityInfo.APIs
 
             app.UseRouting();
 
-            app.UseResponseCaching();
+            //app.UseResponseCaching();
 
-            app.UseHttpCacheHeaders();
+            //app.UseHttpCacheHeaders();
 
             app.UseAuthentication();
 

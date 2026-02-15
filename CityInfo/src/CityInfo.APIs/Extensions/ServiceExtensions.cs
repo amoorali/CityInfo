@@ -3,9 +3,12 @@ using Asp.Versioning.ApiExplorer;
 using CityInfo.Application.Behaviors;
 using CityInfo.Application.Common.Exceptions;
 using CityInfo.Application.Validation.PointOfInterest;
+using CityInfo.Infrastructure.DbContexts;
+using CityInfo.Infrastructure.Identity;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.StaticFiles;
@@ -86,7 +89,14 @@ namespace CityInfo.APIs.Extensions
         #region [ Authentication ]
         public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AuthenticateJwtBearer(configuration);
+            services.AddIdentityCore<ApplicationUser>()
+                    .AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<CityInfoContext>()
+                    .AddSignInManager()
+                    .AddDefaultTokenProviders();
+
+            //services.AuthenticateJwtBearer(configuration);
+            services.AuthenticateCookie(configuration);
         }
         #endregion
 
