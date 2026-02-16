@@ -6,8 +6,7 @@ namespace CityInfo.Application.Features.PointOfInterest.Queries
 {
     #region [ Query Record ]
     public record GetPointsOfInterestQuery(
-        int CityId,
-        string? CityName
+        int CityId
     ) : IRequest<GetPointsOfInterestResult>, IRequireExisitingCity;
     #endregion
 }

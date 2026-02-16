@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using CityInfo.APIs.Extensions.Filters;
 using CityInfo.Application.DTOs.PointOfInterest;
 using CityInfo.Application.Features.PointOfInterest.Commands;
 using CityInfo.Application.Features.PointOfInterest.Queries;
@@ -13,7 +14,7 @@ using Microsoft.Extensions.Options;
 namespace CityInfo.APIs.Controllers.V1
 {
     [ApiController]
-    [Authorize(Policy = "MustBeFromAntwerp")]
+    [Authorize]
     [ApiVersion(1)]
     [Route("api/v{version:apiVersion}/cities/{cityId}/pointsofinterest")]
     public class PointsOfInterestController : ControllerBase
@@ -32,12 +33,11 @@ namespace CityInfo.APIs.Controllers.V1
         #endregion
 
         #region [ GET Methods ]
+        [ApiValidationAuthorizationFilter]
         [HttpGet(Name = "GetPointsOfInterestAsync")]
         public async Task<ActionResult<IEnumerable<PointOfInterestDto>>> GetPointsOfInterestAsync(int cityId)
         {
-            var cityName = User.Claims.First(c => c.Type == "city").Value;
-
-            var result = await _mediator.Send(new GetPointsOfInterestQuery(cityId, cityName));
+            var result = await _mediator.Send(new GetPointsOfInterestQuery(cityId));
 
             if (result.Forbid)
                 return Forbid();

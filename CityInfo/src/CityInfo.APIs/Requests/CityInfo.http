@@ -43,3 +43,14 @@ Content-Type:application/json
 // authenticated GET request
 GET {{schema}}://{{hostname}}:{{port}}/api/v1/cities
 Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZ2l2ZW5fbmFtZSI6IiIsImZhbWlseV9uYW1lIjoiRmFsbGFoaSIsImNpdHkiOiJBbnR3ZXJwIiwibmJmIjoxNzY1MTgyMzc2LCJleHAiOjE3NjUxODU5NzYsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcyMTEiLCJhdWQiOiJjaXR5aW5mb2FwaSJ9.rtYIDpz5NuhgQmV84qjv2y-wsAkyNagLpHcDCXJcu8Q
+
+###
+
+// unauthorized request
+GET {{schema}}://{{hostname}}:{{port}}/api/v1/cities/1/pointsofinterest
+Accept: application/json
+
+###
+// authorized request
+GET {{schema}}://{{hostname}}:{{port}}/api/v1/cities/2/pointsofinterest
+X-ApiKey: 8nZtutwqpM6ilXXjOqnf9QRWU1/lRtFkmKLNlilvL/Yf+RjFyyripPL+kNonrRRT
