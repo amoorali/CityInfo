@@ -82,11 +82,7 @@ namespace CityInfo.Application.Features.City.Handlers
             #endregion
 
             #region [ Sorting ]
-            if (!string.IsNullOrWhiteSpace(parameters.OrderBy) &&
-                parameters.OrderBy.Equals("name", StringComparison.OrdinalIgnoreCase))
-            {
-                query = query.OrderBy(c => c.Name);
-            }
+            query = query.ApplySorting(parameters.OrderBy);
             #endregion
 
             var pagedEntities = await PagedList<Domain.Entities.City>.CreateAsync(
