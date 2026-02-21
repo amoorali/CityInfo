@@ -15,9 +15,9 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
         #endregion
 
         #region [ Methods ]
-        public async Task<PointOfInterest?> GetPointOfInterestForCityAsync(int cityId, int pointOfInterestId)
+        public Task<PointOfInterest?> GetPointOfInterestForCityAsync(int cityId, int pointOfInterestId)
         {
-            return await Context.PointsOfInterest
+            return Context.PointsOfInterest
                 .Where(p => p.CityId == cityId && p.Id == pointOfInterestId)
                 .FirstOrDefaultAsync();
         }
@@ -31,7 +31,7 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
 
         public async Task AddPointOfInterestForCityAsync(PointOfInterest pointOfInterest)
         {
-            await Context.Set<PointOfInterest>().AddAsync(pointOfInterest);
+            await Context.Set<PointOfInterest>().AddAsync(pointOfInterest).ConfigureAwait(false);
         }
 
         public async Task<bool> CityNameMatchesCityIdAsync(string? cityName, int cityId)

@@ -92,7 +92,7 @@ namespace CityInfo.Application.Features.City.Handlers
             var pagedEntities = await PagedList<Domain.Entities.City>.CreateAsync(
                 query,
                 parameters.PageNumber,
-                parameters.PageSize);
+                parameters.PageSize).ConfigureAwait(false);
 
             var paginationMetadata = new PaginationMetadata(
                 pagedEntities.TotalCount,

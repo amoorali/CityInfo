@@ -32,7 +32,8 @@ namespace CityInfo.Application.Common.Helpers
             var count = source.Count();
             var items = await source.Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             return new PagedList<T>(items, count, pageNumber, pageSize);
         }

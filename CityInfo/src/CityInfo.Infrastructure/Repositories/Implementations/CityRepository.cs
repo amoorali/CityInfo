@@ -18,16 +18,16 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
         public IQueryable<City> QueryCities()
             => Context.Cities.AsNoTracking();
 
-        public async Task<City?> GetCityWithPointsOfInterestAsync(int cityId)
+        public Task<City?> GetCityWithPointsOfInterestAsync(int cityId)
         {
-            return await Context.Cities
+            return Context.Cities
                 .Include(c => c.PointsOfInterest)
                 .FirstOrDefaultAsync(c => c.Id == cityId);
         }
 
-        public async Task<City?> GetCityWithoutPointsOfInterestAsync(int cityId)
+        public Task<City?> GetCityWithoutPointsOfInterestAsync(int cityId)
         {
-            return await Context.Cities
+            return Context.Cities
                 .FirstOrDefaultAsync(c => c.Id == cityId);
         }
         #endregion

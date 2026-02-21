@@ -45,8 +45,8 @@ namespace CityInfo.Application.Features.City.Handlers
                 throw new BadRequestException("Accept header media type value is not a valid media type.");
 
             Domain.Entities.City? entity = request.IncludePointsOfInterest
-                ? await _cityRepository.GetCityWithPointsOfInterestAsync(request.CityId)
-                : await _cityRepository.GetCityWithoutPointsOfInterestAsync(request.CityId);
+                ? await _cityRepository.GetCityWithPointsOfInterestAsync(request.CityId).ConfigureAwait(false)
+                : await _cityRepository.GetCityWithoutPointsOfInterestAsync(request.CityId).ConfigureAwait(false);
 
             if (entity == null)
                 return new GetCityResult(NotFound: true, Item: null);
